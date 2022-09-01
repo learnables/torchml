@@ -1,9 +1,40 @@
-# mypackage
+# torchml
 
 --------------------------------------------------------------------------------
 
-![Test Status](https://github.com/seba-1511/mypackage/workflows/Testing/badge.svg?branch=master)
+![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
 
-Template to start new PyPI packages
+## TODOs
 
-To get started, grep and replace for `mypackage` everywhere.
+* Replace `myproject` with `torchml` everywhere such that:
+    * All tests pass.
+    * The docs render nicely.
+* Implement algorithms from scikit-learn with PyTorch.
+    * including tests for feature parity (ie, same API, same predictions) and gradient correctness (ie, finite differences).
+    * including docs.
+    * preliminary example: [Linear Regression](torchml/linear_model/linear_regression.py) with some [tests](tests/unit/linear_model/linear_regression_tests.py).
+* A logo?
+
+## Getting started
+
+```
+make dev
+```
+
+## Tests
+
+Add your own unit tests in: `tests/unit/module/submodule_test.py` and run:
+
+```
+make tests
+```
+
+## Docs
+
+Add your own to: `mkdocs.yaml` and in `docs/api/module.md`, run:
+
+```
+make docs
+```
+
+and open [http://localhost:8000](http://localhost:8000).

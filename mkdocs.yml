@@ -4,16 +4,17 @@ nav:
   - Documentation:
     - mypackage: api/index.md
     - mypackage.utils: api/utils.md
+    - torchml.linear_model: api/linear_model.md
   - Changelog: changelog.md
-  - GitHub: https://github.com/seba-1511/mypackage/
+  - GitHub: https://github.com/learnables/mypackage/
 
 docs_dir: ./docs
 site_name: mypackage
 site_url: http://mypackage.net
 site_author: 'Séb Arnold'
-google_analytics: ['UA-68693545-3', 'seba-1511.github.com']
-repo_name: 'seba-1511/mypackage'
-repo_url: 'https://github.com/seba-1511/mypackage'
+google_analytics: ['UA-68693545-3', 'learnables.github.com']
+repo_name: 'learnables/mypackage'
+repo_url: 'https://github.com/learnables/mypackage'
 edit_uri: ''
 theme:
   name: 'material'
@@ -39,11 +40,9 @@ extra_css:
 extra:
   social:
     - type: 'github'
-      link: 'https://github.com/seba-1511'
-    - type: 'twitter'
-      link: 'https://twitter.com/seba1511'
+      link: 'https://github.com/learnables'
     - type: 'bug'
-      link: 'https://github.com/seba-1511/mypackage/issues/new'
+      link: 'https://github.com/learnables/mypackage/issues/new'
 
 plugins:
   - search

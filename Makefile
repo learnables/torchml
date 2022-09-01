@@ -7,7 +7,7 @@ dev:
 	python setup.py develop
 
 lint:
-	pycodestyle mypackage/ --max-line-length=160
+	pycodestyle torchml/ --max-line-length=160
 
 lint-examples:
 	pycodestyle examples/ --max-line-length=80
