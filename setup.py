@@ -34,6 +34,5 @@ setup(
     scripts=[],
     install_requires=[
         # Add requirements here
-        "torch"
     ],
 )

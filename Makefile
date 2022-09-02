@@ -3,6 +3,10 @@
 
 # Admin
 dev:
+	pip install -e .
+	pip install -r requirements-dev.txt
+
+ci:
 	pip install --progress-bar off -r requirements.txt >> log_install.txt
 	python setup.py develop
 
