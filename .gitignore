@@ -132,3 +132,4 @@ dmypy.json
 docs/mkdocs.yml
 log_install.txt
 .vscode/
+.idea/
