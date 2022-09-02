@@ -2,9 +2,9 @@
 
 import re
 from setuptools import (
-        setup,
-        find_packages,
-        )
+    setup,
+    find_packages,
+)
 
 # Parses version number: https://stackoverflow.com/a/7071358
 VERSIONFILE = 'torchml/_version.py'
@@ -27,11 +27,13 @@ setup(
     author='Seb Arnold',
     author_email='smr.arnold@gmail.com',
     url='https://learnables.github.com/torchml',
-    download_url='https://github.com/learnables/torchml/archive/' + str(VERSION) + '.zip',
+    download_url='https://github.com/learnables/torchml/archive/' +
+        str(VERSION) + '.zip',
     license='License :: OSI Approved :: Apache Software License',
     classifiers=[],
     scripts=[],
     install_requires=[
         # Add requirements here
+        "torch"
     ],
 )
