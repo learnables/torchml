@@ -26,7 +26,7 @@ jobs:
                   python3 --version
                   python3 -m pip install -U pip
                   pip3 install requests
-                  make dev
+                  make ci
             - name: Lint Code
               run: make lint
             - name: Run Tests
