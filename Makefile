@@ -7,7 +7,7 @@ dev:
 	pip install -r requirements-dev.txt
 
 ci:
-	pip install --progress-bar off -r requirements.txt >> log_install.txt
+	pip install --progress-bar off -r requirements-dev.txt >> log_install.txt
 	python setup.py develop
 
 lint:
