@@ -17,6 +17,13 @@
 
 ## Getting started
 
+Create a virtual environment:
+
+```
+conda create -n torchml python=3.9
+conda activate torchml
+```
+
 Install the library locally in development mode:
 
 ```
