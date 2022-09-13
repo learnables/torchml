@@ -17,6 +17,8 @@
 
 ## Getting started
 
+Install the library locally in development mode:
+
 ```
 make dev
 ```
