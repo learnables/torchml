@@ -93,6 +93,7 @@ class RidgeRegression(ml.Model):
         """
         if self.fit_intercept:
             X = torch.cat([torch.ones(X.shape[0], 1), X], dim = 1)
+            
         return X @ self.weight
 
 
