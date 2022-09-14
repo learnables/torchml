@@ -1,4 +1,3 @@
-
 """
 Some useful utilities for mypackage.
 """
@@ -63,16 +62,16 @@ class Example(list):
     """
 
     def __init__(
-            self,
-            module,
-            transform,
-            lr=1.0,
-            adapt_transform=False,
-            first_order=False,
-            allow_unused=False,
-            allow_nograd=False,
-            **kwargs,
-            ):
+        self,
+        module,
+        transform,
+        lr=1.0,
+        adapt_transform=False,
+        first_order=False,
+        allow_unused=False,
+        allow_nograd=False,
+        **kwargs,
+    ):
         """
         ## Arguments
 
@@ -83,12 +82,12 @@ class Example(list):
         pass
 
     def adapt(
-            self,
-            loss,
-            first_order=None,
-            allow_nograd=None,
-            allow_unused=None,
-            ):
+        self,
+        loss,
+        first_order=None,
+        allow_nograd=None,
+        allow_unused=None,
+    ):
         """
         Takes a gradient step on the loss and updates the cloned parameters in place.
 

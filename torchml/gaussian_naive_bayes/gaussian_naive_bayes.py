@@ -1,4 +1,3 @@
-
 import math
 import torch
 
@@ -41,7 +40,7 @@ class GaussianNB(ml.Model):
     def __init__(
         self,
         *,
-        priors=None, 
+        priors=None,
         var_smoothing=1e-9,
     ):
         super().__init__()
@@ -73,7 +72,7 @@ class GaussianNB(ml.Model):
         self.n_feature = X.shape[1]
         y_unique_val = y.unique()
         self.n_class = len(y_unique_val)
-        
+
         # Initialize the class prior
         if self.priors is not None:
             self.priors = torch.from_numpy(self.priors)
@@ -92,7 +91,7 @@ class GaussianNB(ml.Model):
             self.class_probs = y.int().bincount().float() / size
 
         # All the posterior probabilites
-        cond_probs = [] 
+        cond_probs = []
         for i in range(self.n_class):
             cond_probs.append([])
             # Group samples by class
@@ -110,13 +109,15 @@ class GaussianNB(ml.Model):
 
     def gaussian_likelihood(self, X, mean, std):
         """Computes the gaussian likelihood
-        
+
         ## Arguments
             * `X` - A torch tensor for the data.
             * `mean` - A float for the mean of the gaussian.
             * `std` - A flot for the standard deviation of the gaussian.
         """
-        return (1 / (2 * math.pi * std.pow(2))) * torch.exp(-0.5 * ((X - mean) / std).pow(2))
+        return (1 / (2 * math.pi * std.pow(2))) * torch.exp(
+            -0.5 * ((X - mean) / std).pow(2)
+        )
 
     def predict(self, X):
         """
@@ -134,9 +135,8 @@ class GaussianNB(ml.Model):
         """
         if len(X.shape) == 1:
             X = X.unsqueeze(0)
-        
+
         n_sample = X.shape[0]
-        # import ipdb; ipdb.set_trace()
         pred_probs = torch.zeros((n_sample, self.n_class), dtype=torch.float32)
         for k in range(n_sample):
             elt = X[k]
@@ -148,6 +148,6 @@ class GaussianNB(ml.Model):
                     # multiply by the gaussian likelihood with parameters
                     # mean and std of the class i on feature j
                     mean, std = prob_feature_per_class[j]
-                    pred_probs[k][i] *= self.gaussian_likelihood(elt[j], mean, std)     
+                    pred_probs[k][i] *= self.gaussian_likelihood(elt[j], mean, std)
         # Get to highest probability among all classes
         return pred_probs.argmax(dim=1)
