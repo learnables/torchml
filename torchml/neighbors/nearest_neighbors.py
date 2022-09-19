@@ -18,17 +18,18 @@ def _distance_matrix(x: torch.Tensor, y: torch.Tensor, p=2,
     y = y.unsqueeze(0).expand(n, m, d)
 
     if dist_func is None:
-        return torch.pow(x - y, p).sum(2)
+        return torch.nn.PairwiseDistance(p=p)(x, y)
     return dist_func(x, y)
 
 
 class NearestNeighbors(ml.Model):
+    # pylint: disable=E501
     """
     ## Description
 
     Unsupervised learner for implementing neighbor searches.
 
-    Implementation of scikit-learn's Nearest neighbors APIs using pytorch.
+    Implementation of scikit-learn's nearest neighbors APIs using PyTorch.
 
     ## References
     1. Fix, E. and Hodges, J.L. (1951) Discriminatory Analysis, Nonparametric Discrimination: Consistency Properties. Technical Report 4, USAF School of Aviation Medicine, Randolph Field.
@@ -37,28 +38,28 @@ class NearestNeighbors(ml.Model):
     4. [Referenced Implementation](https://gist.github.com/JosueCom/7e89afc7f30761022d7747a501260fe3)
 
     ## Arguments
-    * n_neighbors (int, default=5):
+    * ``n_neighbors`` (int, default=5):
         Number of neighbors to use by default for kneighbors queries.
 
-    * radius (float, default=1.0):
+    * ``radius`` (float, default=1.0):
         Range of parameter space to use by default for radius_neighbors queries.
 
-    * algorithm (string, default=’auto’):
+    * ``algorithm`` (string, default=’auto’):
         Dummy variable to mimic the sklearn API
 
-    * leaf_size (int, default=30):
+    * ``leaf_size`` (int, default=30):
         Dummy variable to mimic the sklearn API
 
-    * metric (str or callable, default=’minkowski’):
+    * ``metric`` (str or callable, default=’minkowski’):
         No metric supprt right now, dummy variable and always minkowski
 
-    * p (int, default=2):
+    * ``p`` (int, default=2):
         No metric supprt right now, dummy variable and always 2
 
-    * metric_paramsdict (default=None):
+    * ``metric_paramsdict`` (default=None):
         Dummy variable to mimic the sklearn API
 
-    * n_jobs (int, default=None):
+    * ``n_jobs`` (int, default=None):
         Dummy variable to mimic the sklearn API
 
     ## Example
@@ -71,9 +72,10 @@ class NearestNeighbors(ml.Model):
     neigh = ml.neighbors.NearestNeighbors(n_neighbors=3)
     neigh.fit(torch.from_numpy(samples))
     neigh.kneighbors(torch.from_numpy(point))
-    (tensor([[29.0000, 49.2544, 52.9339]]), tensor([[3, 2, 1]]))
     ~~~
     """
+
+    # pylint: disable=E501
 
     def __init__(self, *, n_neighbors=5, radius=1.0, algorithm="auto", leaf_size=30, metric="minkowski", p=2,
                  metric_params=None, n_jobs=None):
@@ -94,8 +96,8 @@ class NearestNeighbors(ml.Model):
         Initialize the class with training sets
 
         ## Arguments
-        * X (torch.Tensor): the training set
-        * y (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency
+        * ``X`` (torch.Tensor): the training set
+        * ``y`` (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency
 
         """
         self.train_pts = X
@@ -106,9 +108,9 @@ class NearestNeighbors(ml.Model):
         Computes the knearest neighbors and returns those k neighbors
 
         ## Arguments
-        * X (torch.Tensor): the target point
-        * n_neighbors (int, default=None): optional argument to respecify the parameter k in k nearest neighbors
-        * return_distance (bool, default=True): returns the distances to the neighbors if true
+        * ``X`` (torch.Tensor): the target point
+        * ``n_neighbors`` (int, default=None): optional argument to respecify the parameter k in k nearest neighbors
+        * ``return_distance`` (bool, default=True): returns the distances to the neighbors if true
         """
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
@@ -121,8 +123,10 @@ class NearestNeighbors(ml.Model):
             )
         elif X is None:
             raise TypeError("X is not specified")
-        dist = torch.sqrt(_distance_matrix(X, self.train_pts, self.p, None if isinstance(self.metric, str) else self.metric))
-        k = self.n_neighbors if self.n_neighbors <= self.train_pts.size(0) else self.train_pts.size(0)
+        dist = _distance_matrix(
+            X, self.train_pts, self.p, None if isinstance(self.metric, str) else self.metric)
+        k = self.n_neighbors if self.n_neighbors <= self.train_pts.size(
+            0) else self.train_pts.size(0)
         knn = torch.topk(dist, k, largest=False)
         if return_distance:
             return knn.values, knn.indices

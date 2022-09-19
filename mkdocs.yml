@@ -3,7 +3,6 @@ nav:
   - Home: index.md
   - Documentation:
     - torchml: api/index.md
-    - torchml.utils: api/utils.md
     - torchml.linear_model: api/linear_model.md
     - torchml.neighbors: api/neighbors.md
   - Changelog: changelog.md

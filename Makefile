@@ -11,7 +11,7 @@ ci:
 	python setup.py develop
 
 lint:
-	pycodestyle torchml/ --max-line-length=160
+	pycodestyle torchml/ --max-line-length=160 --ignore=E501
 
 lint-examples:
 	pycodestyle examples/ --max-line-length=80

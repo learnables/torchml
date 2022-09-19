@@ -133,3 +133,4 @@ docs/mkdocs.yml
 log_install.txt
 .vscode/
 .idea/
+.all_objects.cache
