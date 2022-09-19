@@ -1,7 +1,7 @@
 pygments
 pymdown-extensions
 twine
-mkdocs==1.2.3
+mkdocs==1.2.4
 mkdocs-bootswatch==1.0
 mkdocs-material==4.6.3
 mkdocstrings==0.18.0
@@ -13,3 +13,4 @@ pycodestyle>=2.3.1
 scikit-learn==1.1.2
 torch
 numpy
+setuptools~=58.1.0
