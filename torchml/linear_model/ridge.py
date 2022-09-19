@@ -19,7 +19,7 @@ class Ridge(ml.Model):
     * `λ`- constant that multiplies the L2 term
     * `y` - covariates
 
-    The above equation is the closed-form solution for ridge's objective function:
+    The above equation is the closed-form solution for ridge's objective function
 
     $$ \\min_w \\frac{1}{2} \\vert \\vert  Xw - y \\vert \\vert^2 I + \\frac{1}{2} \\lambda \\vert \\vert w \\vert \\vert^2 $$
 
