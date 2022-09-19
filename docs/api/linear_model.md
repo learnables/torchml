@@ -8,3 +8,9 @@
       members:
         - fit
         - predict
+
+### ::: torchml.linear_model.Ridge
+    selection:
+      members:
+        - fit
+        - predict
