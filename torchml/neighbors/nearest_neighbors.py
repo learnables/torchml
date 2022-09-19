@@ -32,34 +32,36 @@ class NearestNeighbors(ml.Model):
     Implementation of scikit-learn's nearest neighbors APIs using PyTorch.
 
     ## References
+
     1. Fix, E. and Hodges, J.L. (1951) Discriminatory Analysis, Nonparametric Discrimination: Consistency Properties. Technical Report 4, USAF School of Aviation Medicine, Randolph Field.
     2. MIT 6.034 Artificial Intelligence, Fall 2010, [10. Introduction to Learning, Nearest Neighbors](https://www.youtube.com/watch?v=09mb78oiPkA)
     3. The scikit-learn [documentation page](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestNeighbors.html#sklearn.neighbors.NearestNeighbors) for nearest neighbors.
     4. [Referenced Implementation](https://gist.github.com/JosueCom/7e89afc7f30761022d7747a501260fe3)
 
     ## Arguments
-    * ``n_neighbors`` (int, default=5):
+
+    * `n_neighbors` (int, default=5):
         Number of neighbors to use by default for kneighbors queries.
 
-    * ``radius`` (float, default=1.0):
+    * `radius` (float, default=1.0):
         Range of parameter space to use by default for radius_neighbors queries.
 
-    * ``algorithm`` (string, default=’auto’):
+    * `algorithm` (string, default=’auto’):
         Dummy variable to mimic the sklearn API
 
-    * ``leaf_size`` (int, default=30):
+    * `leaf_size` (int, default=30):
         Dummy variable to mimic the sklearn API
 
-    * ``metric`` (str or callable, default=’minkowski’):
+    * `metric` (str or callable, default=’minkowski’):
         No metric supprt right now, dummy variable and always minkowski
 
-    * ``p`` (int, default=2):
+    * `p` (int, default=2):
         No metric supprt right now, dummy variable and always 2
 
-    * ``metric_paramsdict`` (default=None):
+    * `metric_paramsdict` (default=None):
         Dummy variable to mimic the sklearn API
 
-    * ``n_jobs`` (int, default=None):
+    * `n_jobs` (int, default=None):
         Dummy variable to mimic the sklearn API
 
     ## Example
@@ -105,12 +107,14 @@ class NearestNeighbors(ml.Model):
     def kneighbors(self, X: torch.Tensor, n_neighbors=None, return_distance=True) -> any:
         """
         ## Description
+
         Computes the knearest neighbors and returns those k neighbors
 
         ## Arguments
-        * ``X`` (torch.Tensor): the target point
-        * ``n_neighbors`` (int, default=None): optional argument to respecify the parameter k in k nearest neighbors
-        * ``return_distance`` (bool, default=True): returns the distances to the neighbors if true
+
+        * `X` (torch.Tensor): the target point
+        * `n_neighbors` (int, default=None): optional argument to respecify the parameter k in k nearest neighbors
+        * `return_distance` (bool, default=True): returns the distances to the neighbors if true
         """
         if n_neighbors is None:
             n_neighbors = self.n_neighbors
