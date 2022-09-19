@@ -10,11 +10,18 @@ class Ridge(ml.Model):
 
     ## Description
 
-    Ridge: Linear Regression with L2 Penalty Term
+    Linear regression with L2 penalty term.
 
-    ## Equation
+    $$ w = (X^TX + \\lambda I)^{-1}X^Ty $$
 
-    $$ w = (X^{T}X + λI)^{-1}X^{T}y $$
+    * `w` - weights of the linear regression with L2 penalty
+    * `X` - variates
+    * `λ`- constant that multiplies the L2 term
+    * `y` - covariates
+
+    The above equation is the closed-form solution for ridge's objective function:
+
+    $$ \\min_w \\frac{1}{2} \\vert \\vert  Xw - y \\vert \\vert^2 I + \\frac{1}{2} \\lambda \\vert \\vert w \\vert \\vert^2 $$
 
     ## References
 
@@ -25,10 +32,10 @@ class Ridge(ml.Model):
     ## Arguments
 
     * `alpha` (float, default=1.0) - Constant that multiplies the L2 term. alpha must be a non-negative float.
-    * `fit_intercept` (bool, default=True) - Whether or not to fit intercept in the model.
+    * `fit_intercept` (bool, default=False) - Whether or not to fit intercept in the model (not implemented).
     * `normalize` (bool, default=False) - If True, the regressors X will be normalized. normalize will be deprecated in the future.
     * `copy_X` (bool, default=True) - If True, X will be copied.
-    * `solver` (string, default='auto') - Different solvers or algorithms to use
+    * `solver` (string, default='auto') - Different solvers or algorithms to use.
 
     ## Example
 
@@ -40,11 +47,11 @@ class Ridge(ml.Model):
     def __init__(
         self,
         *,
-        alpha=1.0,
-        fit_intercept=False,
-        normalize=False,
-        copy_X=True,
-        solver='auto'
+        alpha: float = 1.0,
+        fit_intercept: bool = False,
+        normalize: bool = False,
+        copy_X: bool = True,
+        solver: str = 'auto'
     ):
         super(Ridge, self).__init__()
         self.alpha = alpha
@@ -53,8 +60,15 @@ class Ridge(ml.Model):
         self.copy_X = copy_X
         self.solver = solver
 
-    def fit(self, X: torch.Tensor, y=None):
+        if self.fit_intercept:
+            raise NotImplementedError('fit_intercept not implemented yet.')
+
+    def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
+        ## Description
+
+        Compute the weights for the model given variates and covariates.
+
         ## Arguments
 
         * `X` (Tensor) - Input variates.
@@ -69,9 +83,6 @@ class Ridge(ml.Model):
         """
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
-        if self.fit_intercept:
-            raise ValueError('fit_intercept not supported yet.')
-
         # when alpha == 0, L2 penalty term will not apply
         if self.alpha == 0:
             self.weight = torch.pinverse(X.T @ X) @ X.T @ y
@@ -81,6 +92,10 @@ class Ridge(ml.Model):
 
     def predict(self, X: torch.Tensor):
         """
+        ## Description
+
+        Predict covariates by the trained model.
+
         ## Arguments
 
         * `X` (Tensor) - Input variates.
