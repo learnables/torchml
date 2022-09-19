@@ -1,5 +1,5 @@
 
-# mypackage.utils
+# torchml.utils
 
 
 Equation from Markdown:
@@ -10,9 +10,9 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 ```
 
-::: mypackage.utils.echo
+::: torchml.utils.echo
 
-::: mypackage.utils.Example
+::: torchml.utils.Example
     selection:
       members:
         - __init__
