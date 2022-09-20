@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math
 import torch
 
@@ -43,15 +44,16 @@ class GaussianNB(ml.Model):
     def __init__(
         self,
         *,
-        priors=None,
-        var_smoothing=1e-9,
+        priors: torch.Tensor | None = None,
+        var_smoothing: float = 1e-9,
     ):
         super().__init__()
-        assert isinstance(priors, torch.Tensor) or priors is None
         self.priors = priors
         self.var_smoothing = var_smoothing
 
-    def _update_mean_variance(self, n_past, mu, var, X):
+    def _update_mean_variance(
+        self, n_past: int, mu: float, var: float, X: torch.Tensor
+    ):
         if X.shape[0] == 0:
             return mu, var
 
@@ -77,7 +79,7 @@ class GaussianNB(ml.Model):
 
         return total_mu, total_var
 
-    def fit(self, X, y):
+    def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         ## Arguments
 
@@ -124,7 +126,7 @@ class GaussianNB(ml.Model):
             else self.priors
         )
 
-    def predict(self, X):
+    def predict(self, X: torch.Tensor):
         """
         ## Arguments
 
