@@ -96,7 +96,6 @@ class GaussianNB(ml.Model):
         self.n_feature = X.shape[1]
         self.classes = y.unique()
         self.n_class = len(self.classes)
-
         self.theta = torch.zeros((self.n_class, self.n_feature), dtype=torch.float64)
         self.var = torch.zeros((self.n_class, self.n_feature), dtype=torch.float64)
         self.class_count = torch.zeros(self.n_class, dtype=torch.float64)
