@@ -35,6 +35,9 @@ alltests:
 	make tests >>alltests.txt 2>&1
 	make notravis-tests >>alltests.txt 2>&1
 
+format:
+	black .
+	
 predocs:
 	cp ./README.md docs/index.md
 	cp ./CHANGELOG.md docs/changelog.md

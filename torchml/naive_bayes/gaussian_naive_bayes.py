@@ -11,11 +11,11 @@ class GaussianNB(ml.Model):
 
     ## Description
 
-    Naive Bayes methods are a set of supervised learning algorithms based on applying Bayes' theorem 
-    with the “naive” assumption of conditional independence between every pair of features given the 
+    Naive Bayes methods are a set of supervised learning algorithms based on applying Bayes' theorem
+    with the “naive” assumption of conditional independence between every pair of features given the
     value of the class variable.
 
-    GaussianNB implements the Gaussian Naive Bayes algorithm for classification. The likelihood of the 
+    GaussianNB implements the Gaussian Naive Bayes algorithm for classification. The likelihood of the
     features is assumed to be Gaussian.
 
     ## References
@@ -94,7 +94,7 @@ class GaussianNB(ml.Model):
         self.n_feature = X.shape[1]
         self.classes = y.unique()
         self.n_class = len(self.classes)
-        
+
         self.theta = torch.zeros((self.n_class, self.n_feature), dtype=torch.float64)
         self.var = torch.zeros((self.n_class, self.n_feature), dtype=torch.float64)
         self.class_count = torch.zeros(self.n_class, dtype=torch.float64)
@@ -118,7 +118,11 @@ class GaussianNB(ml.Model):
         self.var[:, :] += self.epsilon
 
         # Empirical prior, with sample_weight taken into account
-        self.class_prior = self.class_count / self.class_count.sum() if self.priors is None else self.priors
+        self.class_prior = (
+            self.class_count / self.class_count.sum()
+            if self.priors is None
+            else self.priors
+        )
 
     def predict(self, X):
         """
@@ -138,8 +142,12 @@ class GaussianNB(ml.Model):
         for i in range(self.classes.shape[0]):
             jointi = torch.log(self.class_prior[i])
             # XXX: not sure why [1] and [N, 1] are not broadcastable
-            n_ij = -0.5 * torch.sum(torch.log(2.0 * math.pi * self.var[i, :]), 0, True).unsqueeze(0).repeat(X.shape[0], 1)
-            n_ij -= 0.5 * torch.sum(((X - self.theta[i, :]) ** 2) / (self.var[i, :]), 1, True)
+            n_ij = -0.5 * torch.sum(
+                torch.log(2.0 * math.pi * self.var[i, :]), 0, True
+            ).unsqueeze(0).repeat(X.shape[0], 1)
+            n_ij -= 0.5 * torch.sum(
+                ((X - self.theta[i, :]) ** 2) / (self.var[i, :]), 1, True
+            )
             joint_log_likelihood.append((jointi + n_ij).squeeze(1))
 
         joint_log_likelihood = torch.stack(joint_log_likelihood).T
