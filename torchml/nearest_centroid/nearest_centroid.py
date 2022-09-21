@@ -1,13 +1,18 @@
-
 import torch
 
-import torchml as ml
+#import torchml as ml
+
+import math
+
+from scipy import sparse as sp
+
+#from ..utils import LabelEncoder
 
 #import numpy as np
 
-import sklearn.neighbors
+#class NearestCentroid(ml.Model):
+class NearestCentroid():
 
-class NearestCentroid(ml.Model):
 
     """
     ## Description
@@ -37,7 +42,7 @@ class NearestCentroid(ml.Model):
         self.metric = metric
         self.shrink_threshold = shrink_threshold
 
-    def fit(self, X, y):
+    def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         Fit the NearestCentroid model according to the given training data.
         Parameters
@@ -56,25 +61,42 @@ class NearestCentroid(ml.Model):
 
         if self.metric == "precomputed":
             raise ValueError("Precomputed is not supported.")
+
+        """
+        TODO: Validate data?
         # If X is sparse and the metric is "manhattan", store it in a csc
         # format is easier to calculate the median.
         if self.metric == "manhattan":
             X, y = self._validate_data(X, y, accept_sparse=["csc"])
         else:
             X, y = self._validate_data(X, y, accept_sparse=["csr", "csc"])
-        is_X_sparse = sp.issparse(X)
-        if is_X_sparse and self.shrink_threshold:
-            raise ValueError("threshold shrinking not supported for sparse input")
+        #TODO: sparse?
+        #is_X_sparse = sp.issparse(X)
+        #if is_X_sparse and self.shrink_threshold:
+            #raise ValueError("threshold shrinking not supported for sparse input")
+        """
         
-        #define classification
-        check_classification_targets(y)
+        #TODO: 
+        """
+        do we need to check for classification? 
+        {"binary",
+        "multiclass",
+        "multiclass-multioutput",
+        "multilabel-indicator",
+        "multilabel-sequences"}
+        """
+        #check_classification_targets(y)
 
         n_samples, n_features = X.shape
         #label encoder?
-        le = LabelEncoder()
-        y_ind = le.fit_transform(y)
-        self.classes_ = classes = le.classes_
-        n_classes = classes.size
+        #le = LabelEncoder()
+        #y_ind = le.fit_transform(y)
+        # y_ind: idx, y_classes: unique tensor
+        y_ind, y_classes = torch.unique(y,sorted=False,return_inverse=True)
+
+        #Class: dict[y in Y] = X
+        self.classes_ = classes = y_classes
+        n_classes = classes.size(dim=0)
         if n_classes < 2:
             raise ValueError(
                 "The number of classes has to be greater than one; got %d class"
@@ -84,31 +106,51 @@ class NearestCentroid(ml.Model):
         # Mask mapping each class to its members.
         self.centroids_ = torch.empty((n_classes, n_features), dtype=torch.float64)
         # Number of clusters in each class.
+        # TODO: nk used for shrink
         nk = torch.zeros(n_classes)
 
         for cur_class in range(n_classes):
             center_mask = y_ind == cur_class
-            nk[cur_class] = torch.sum(center_mask)
-            if is_X_sparse:
-                center_mask = torch.where(center_mask)[0]
+            nk[cur_class] = torch.sum(center_mask)  
+            
+            """
+            TODO: SPARSE
+            #if is_X_sparse:
+                #center_mask = torch.where(center_mask)[0]
+            """
 
             # XXX: Update other averaging methods according to the metrics.
             if self.metric == "manhattan":
+                self.centroids_[cur_class] = torch.median(X[center_mask], axis=0)
+                """
+                TODO: check if SPARSE
                 # NumPy does not calculate median of sparse matrices.
                 if not is_X_sparse:
                     self.centroids_[cur_class] = torch.median(X[center_mask], axis=0)
                 else:
                     # csc median needs imp
                     self.centroids_[cur_class] = csc_median_axis_0(X[center_mask])
+                """
             else:
+                """
+                TODO: WARING
                 if self.metric != "euclidean":
                     warnings.warn(
                         "Averaging for metrics other than "
                         "euclidean and manhattan not supported. "
                         "The average is set to be the mean."
                     )
-                self.centroids_[cur_class] = X[center_mask].mean(axis=0)
+                """
+                #self.centroids_[cur_class] = X[center_mask].mean(axis=0)
+                #self.centroids_[cur_class] = X[0:n_samples-1,center_mask].mean(axis=0)
+                #for s in range(n_samples):
+                print("haha")
+                self.centroids_[cur_class] = torch.nanmean(X[:,center_mask])
+                #self.centroids_[cur_class] = torch.mean(X[0:n_samples-1,center_mask], axis=0)
+                #print(X[0:n_samples-1,center_mask].mean(axis=0))
 
+        """
+        TODO: Shrink Threshhold
         if self.shrink_threshold:
             if torch.all(torch.ptp(X, axis=0) == 0):
                 raise ValueError("All features have zero variance. Division by zero.")
@@ -133,14 +175,73 @@ class NearestCentroid(ml.Model):
             # Now adjust the centroids using the deviation
             msd = ms * deviation
             self.centroids_ = dataset_centroid_[torch.newaxis, :] + msd
+        """
         return self
+        
+    def predict(self, X: torch.tensor)->torch.tensor:
+        print("PREDICTING")
+        print(X)
+        print(self.centroids_)
+        #TODO: check if fitted
+        #check_is_fitted(self)
 
-    def predict(self, X):
-
-        #need check if fitted
-        check_is_fitted(self)
-
-        X = self._validate_data(X, accept_sparse="csr", reset=False)
+        # TODO: DATA validate
+        # X = self._validate_data(X, accept_sparse="csr", reset=False)
         return self.classes_[
-            pairwise_distances(X, self.centroids_, metric=self.metric).argmin(axis=1)
+            #pairwise_distances(X, self.centroids_, metric=self.metric).argmin(axis=1)
+            #torch.argmin(self.pairwise_distances(X, self.centroids_, metric=self.metric))
+            
+            torch.argmin(torch.nn.PairwiseDistance(p=2)(X,self.centroids_))
         ]
+    
+"""
+    def pairwise_distances (X, Y, metric) -> torch.tensor:
+        #Do we use torch.multiprocessing or {from torch.nn.parallel import DistributedDataParallel}?
+        #https://discuss.pytorch.org/t/how-do-i-map-joblibs-parallel-function-to-pytorchs-distributeddataparallel/89095
+
+        #TODO: Consider sparse matrix
+        if Y is None:
+            Y = X
+        else:
+            ret = torch.empty(Y.size)
+
+            if metric == "euclidean":
+                for i in range(Y.size):
+                    y = Y[i]
+                    XX = torch.einsum("ij,ij->i",X,X)
+                    YY = torch.einsum("ij,ij->i",y,y)
+                    ret[i] = XX+YY+(-2)*torch.cross(X,y.T)
+            
+
+        return ret
+
+
+def LabelEncoder():
+    
+    <a class="source-link" href="">https://github.com/scikit-learn/scikit-learn/blob/36958fb240fbe435673a9e3c52e769f01f36bec0/sklearn/preprocessing/_label.py#L20</a>
+
+    Simple label encoder for 1d data 
+
+    ## Arguments
+
+    * `msg` (string): The message to be printed.
+
+    ## Attributes
+    * classes_ : ndarray of shape (n_classes,)
+        Holds the label for each class.
+
+    ## Example
+
+    ~~~python
+    le = LabelEncoder();
+    y_ind = le.fit_tranform()
+    le._classes :.. 
+
+
+    ~~~
+
+    def fit(self, y:torch.tensor):
+
+        self.classes_ = {}
+        self.classes_[a]
+    """
