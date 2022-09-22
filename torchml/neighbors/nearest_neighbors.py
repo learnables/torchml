@@ -102,6 +102,7 @@ class NearestNeighbors(ml.Model):
 
         """
         self.train_pts = X
+        return self
 
     def kneighbors(self, X: torch.Tensor, n_neighbors=None, return_distance=True) -> any:
         """

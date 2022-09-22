@@ -11,10 +11,9 @@ DIM = 5
 class Testkneighbors(unittest.TestCase):
 
     def test_kneighbors(self):
-        X = np.random.randn(BSZ, DIM)
-        y = np.random.randn(1, DIM)
-
         for i in range(1, 200, 1):
+            X = np.random.randn(BSZ, DIM)
+            y = np.random.randn(1, DIM)
             ref = neighbors.NearestNeighbors(p=i)
             ref.fit(X)
             test = ref.kneighbors(y)
