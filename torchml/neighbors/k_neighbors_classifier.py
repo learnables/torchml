@@ -85,13 +85,16 @@ class KNeighborsClassifier(ml.Model):
                 mode, _ = torch.mode(_y[neigh_ind, k], dim=1)
             else:
                 mode, _ = self._weighted_mode(_y[neigh_ind, k], weights)
-            mode = torch.asarray(mode.ravel())
+            mode = torch.asarray(mode.ravel(), dtype=torch.long)
             y_pred[:, k] = classes_k.take(mode)
 
         if not self.outputs_2d_:
             y_pred = y_pred.ravel()
 
         return y_pred
+
+    def kneighbors(self, X=None, n_neighbors=None, return_distance=True):
+        return self.KNN.kneighbors(X=X, n_neighbors=n_neighbors, return_distance=return_distance)
 
     def _check_weights(self, weights: str):
         if weights not in (None, "uniform", "distance") and not callable(weights):
@@ -117,6 +120,15 @@ class KNeighborsClassifier(ml.Model):
             )
 
     def _weighted_mode(self, a: torch.Tensor, w: torch.Tensor):
+        res = torch.empty(0)
+        resi = torch.empty(0)
+        for i, x in enumerate(a):
+            res1 = self._weighted_mode_util(x, w)
+            res = torch.cat((res, torch.tensor([res1[0]])))
+            resi = torch.cat((resi, torch.tensor([res1[1]])))
+        return res, resi
+
+    def _weighted_mode_util(self, a: torch.Tensor, w: torch.Tensor):
         unique_a = torch.unique(a)
         res = torch.empty(0)
         for i, x in enumerate(unique_a):
