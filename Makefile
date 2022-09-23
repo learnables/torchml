@@ -36,8 +36,11 @@ alltests:
 	make notravis-tests >>alltests.txt 2>&1
 
 format:
+	make lint
+	make lint-examples
+	make lint-tests
 	black .
-	
+
 predocs:
 	cp ./README.md docs/index.md
 	cp ./CHANGELOG.md docs/changelog.md
