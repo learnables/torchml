@@ -80,13 +80,13 @@ class KNeighborsClassifier(ml.Model):
         weights = self._get_weights(neigh_dist, self.weights)
 
         y_pred = torch.empty((n_queries, n_outputs), dtype=classes_[0].dtype)
+
         for k, classes_k in enumerate(classes_):
             if weights is None:
                 mode, _ = torch.mode(_y[neigh_ind, k], dim=1)
             else:
-                mode, _ = weighted_mode(_y[neigh_ind, k], weights, dim=1)
-
-            mode = np.asarray(mode.ravel(), dtype=np.intp)
+                mode, _ = self._weighted_mode(_y[neigh_ind, k], weights)
+            mode = torch.asarray(mode.ravel())
             y_pred[:, k] = classes_k.take(mode)
 
         if not self.outputs_2d_:
@@ -117,5 +117,12 @@ class KNeighborsClassifier(ml.Model):
                 "'distance', or a callable function"
             )
 
-    def _weighted_mode(self, a : torch.Tensor, w : torch.Tensor):
-        
+    def _weighted_mode(self, a: torch.Tensor, w: torch.Tensor):
+        unique_a = torch.unique(a)
+        res = torch.empty(0)
+        for i, x in enumerate(unique_a):
+            cleared = (a == x).float()
+            cleared_weights = cleared * w
+            sum = torch.sum(cleared_weights)
+            res = torch.cat((res, torch.tensor([sum])))
+        return unique_a[torch.argmax(res)], torch.max(res)
