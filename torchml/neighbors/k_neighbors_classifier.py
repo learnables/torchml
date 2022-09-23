@@ -3,7 +3,6 @@ import warnings
 
 import torch
 import torchml as ml
-import sklearn.neighbors as n
 
 
 class KNeighborsClassifier(ml.Model):
