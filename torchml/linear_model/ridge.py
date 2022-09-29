@@ -51,7 +51,7 @@ class Ridge(ml.Model):
         fit_intercept: bool = False,
         normalize: bool = False,
         copy_X: bool = True,
-        solver: str = 'auto'
+        solver: str = "auto"
     ):
         super(Ridge, self).__init__()
         self.alpha = alpha
@@ -61,7 +61,7 @@ class Ridge(ml.Model):
         self.solver = solver
 
         if self.fit_intercept:
-            raise NotImplementedError('fit_intercept not implemented yet.')
+            raise NotImplementedError("fit_intercept not implemented yet.")
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """

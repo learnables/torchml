@@ -1,4 +1,3 @@
-
 import unittest
 import numpy as np
 import torch
@@ -11,7 +10,6 @@ DIM = 5
 
 
 class TestLinearRegression(unittest.TestCase):
-
     def test_fit(self):
         X = np.random.randn(BSZ, DIM)
         y = np.random.randn(BSZ, 1)
@@ -29,5 +27,5 @@ class TestLinearRegression(unittest.TestCase):
         self.assertTrue(np.allclose(ref_preds, model_forward.numpy()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
