@@ -2,9 +2,9 @@
 nav:
   - Home: index.md
   - Documentation:
-    - mypackage: api/index.md
-    - mypackage.utils: api/utils.md
+    - torchml: api/index.md
     - torchml.linear_model: api/linear_model.md
+    - torchml.neighbors: api/neighbors.md
   - Changelog: changelog.md
   - GitHub: https://github.com/learnables/mypackage/
 
