@@ -1,1 +1,2 @@
-from .nearest_neighbors import NearestNeighbors
+
+from .nearest_centroid import NearestCentroid
