@@ -1,4 +1,3 @@
-
 import torch
 
 import torchml as ml
@@ -36,7 +35,7 @@ class LinearRegression(ml.Model):
         self,
         *,
         fit_intercept=True,
-        normalize='deprecated',
+        normalize="deprecated",
         copy_X=True,
         n_jobs=None,
         positive=False,
@@ -79,7 +78,7 @@ class LinearRegression(ml.Model):
         ~~~
         """
         if self.fit_intercept:
-            raise ValueError('fit_intercept not supported yet.')
+            raise ValueError("fit_intercept not supported yet.")
 
         self.weight = torch.pinverse(X.T @ X) @ X.T @ y
         #  self.weight = torch.lstsq(y, X).solution

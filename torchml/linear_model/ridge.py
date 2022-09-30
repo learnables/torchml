@@ -51,7 +51,7 @@ class Ridge(ml.Model):
         fit_intercept: bool = False,
         normalize: bool = False,
         copy_X: bool = True,
-        solver: str = 'auto'
+        solver: str = "auto"
     ):
         super(Ridge, self).__init__()
         self.alpha = alpha

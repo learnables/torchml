@@ -45,6 +45,12 @@ docs: predocs
 docs-deploy: predocs
 	mkdocs gh-deploy
 
+format:
+	black .
+	make lint
+	make lint-examples
+	make lint-tests
+
 # https://dev.to/neshaz/a-tutorial-for-tagging-releases-in-git-147e
 release:
 	echo 'Do not forget to bump the CHANGELOG.md'
