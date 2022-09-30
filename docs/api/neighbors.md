@@ -7,3 +7,9 @@
       members:
         - fit
         - kneighbors
+
+### ::: torchml.neighbors.NearestCentroid
+    selection:
+      members:
+        - fit
+        - predict
