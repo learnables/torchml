@@ -1,7 +1,6 @@
-from msilib.schema import Feature
 import unittest
 import numpy as np
-#import torch
+import torch
 import torchml as ml
 import sklearn.neighbors as neighbors
 
@@ -12,16 +11,25 @@ FEA = 3
 class Testcentroids(unittest.TestCase):
 
     def test_kneighbors(self):
-        X = np.random.randn(CLS, Feature)
-        y = np.random.randn(1, CLS)
+        
 
-        for i in range(1, 100):
+        for i in range(10):
+            #X = np.random.randn(CLS, FEA)
+            X = np.random.randint(1,5,size=(CLS, FEA))
+            y = np.random.randint(1,5,size=CLS)
+            torchX = torch.from_numpy(X)
+            torchy = torch.from_numpy(y)
             ref = neighbors.NearestCentroid()
             cent = ml.neighbors.NearestCentroid()
             ref.fit(X,y)
-            cent.fit(X,y)
-            samp = np.random.randn(1,FEA)
-            self.assertTrue(ref.predict(samp) == cent.predict(samp))
+            cent.fit(torchX,torchy)
+            #samp = np.random.randn(CLS,FEA)
+            samp = np.random.randint(1,5,size=(CLS, FEA))
+            refres=ref.predict(samp)
+            centres = cent.predict(torch.from_numpy(samp)).numpy()
+            print("X: {}; \ny: {}; \nsamp: {}".format(X,y,samp))
+            print("Trial{}: ref: {} v.s. cent: {}".format(i,refres,centres))
+            self.assertTrue(np.array_equal(refres,centres))
 
 if __name__ == '__main__':
     unittest.main()
