@@ -32,7 +32,7 @@ class Ridge(ml.Model):
     ## Arguments
 
     * `alpha` (float, default=1.0) - Constant that multiplies the L2 term. alpha must be a non-negative float.
-    * `fit_intercept` (bool, default=False) - Whether or not to fit intercept in the model (not implemented).
+    * `fit_intercept` (bool, default=False) - Whether or not to fit intercept in the model.
     * `normalize` (bool, default=False) - If True, the regressors X will be normalized. normalize will be deprecated in the future.
     * `copy_X` (bool, default=True) - If True, X will be copied.
     * `solver` (string, default='auto') - Different solvers or algorithms to use.
@@ -60,9 +60,6 @@ class Ridge(ml.Model):
         self.copy_X = copy_X
         self.solver = solver
 
-        if self.fit_intercept:
-            raise NotImplementedError("fit_intercept not implemented yet.")
-
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         ## Description
@@ -83,11 +80,17 @@ class Ridge(ml.Model):
         """
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
-        # when alpha == 0, L2 penalty term will not apply
+        if self.fit_intercept:
+            X = torch.cat([torch.ones(X.shape[0], 1), X], dim=1)
+
+        # L2 penalty term will not apply when alpha is 0
         if self.alpha == 0:
             self.weight = torch.pinverse(X.T @ X) @ X.T @ y
         else:
             ridge = self.alpha * torch.eye(X.shape[1])
+            # intercept term is not penalized when fit_intercept is true
+            if self.fit_intercept:
+                ridge[0][0] = 0
             self.weight = torch.pinverse((X.T @ X) + ridge) @ X.T @ y
 
     def predict(self, X: torch.Tensor):
@@ -108,4 +111,6 @@ class Ridge(ml.Model):
         ridge.predict(X_test)
         ~~~
         """
+        if self.fit_intercept:
+            X = torch.cat([torch.ones(X.shape[0], 1), X], dim=1)
         return X @ self.weight
