@@ -14,3 +14,9 @@
       members:
         - fit
         - predict
+
+### ::: torchml.linear_model.Lasso
+    selection:
+      members:
+        - fit
+        - predict
