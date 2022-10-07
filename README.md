@@ -11,8 +11,8 @@
 --------------------------------------------------------------------------------
 
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
-[![made-with-python]()](https://www.python.org/)
-[![Documentation](https://github.com/learnables/torchml)
+[![made-with-python](https://img.shields.io/badge/-Python-blue)](https://www.python.org/)
+[![Documentation](https://img.shields.io/badge/-Documentation-red)](https://github.com/learnables/torchml)
 
 ## Table of contents
 - [TODOs](#todos)
