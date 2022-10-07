@@ -34,6 +34,6 @@ setup(
     classifiers=[],
     scripts=[],
     install_requires=[
-        # Add requirements here
+        'torch>=1.4'
     ],
 )
