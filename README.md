@@ -6,17 +6,20 @@
     <img src="docs/assets/images/logo.png" height="200"> 
   </p>
 </div>
- torchml is a one-for-all library for few-shot learning on top of PyTorch. The library includes standard algorithms from [scikit-learn](https://scikit-learn.org/stable/index.html), and also advanced differentiable solvers/models of current popular few-shot learning models.
+ torchml is a one-for-all library for few-shot learning on top of PyTorch. The library includes standard algorithms from [scikit-learn](https://scikit-learn.org), and also advanced differentiable solvers/models of current popular few-shot learning models.
 
 --------------------------------------------------------------------------------
 
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
+[![made-with-python]()](https://www.python.org/)
+[![Documentation](https://github.com/learnables/torchml)
 
 ## Table of contents
 - [TODOs](#todos)
 - [Getting started](#getting-started)
 - [Tests](#tests)
 - [Docs](#docs)
+- [Tutorial](#tutorials)
 - [Torchml example usage](#torchml-example-usage)
 - [Implementation](#implementation)
 - [Installation](#installation)
@@ -62,14 +65,27 @@ make docs
 
 and open [http://localhost:8000](http://localhost:8000).
 
+## Tutorials
+
+Tutorials
 
 ## Torchml example usage
 
+Torchml example usage
+
 ## Implementation
+
+Implementation
 
 ## Installation
 
+Installation
+
 ## License
 
+License
+
 ## Credits
+
+Credits
 
