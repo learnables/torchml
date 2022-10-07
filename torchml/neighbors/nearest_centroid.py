@@ -52,8 +52,8 @@ class NearestCentroid(ml.Model):
         """
         
         #Convert to float64 tensors
-        X.to(torch.float64)
-        y.to(torch.float64)
+        #X.to(torch.float64)
+        #y.to(torch.float64)
 
         n_samples, n_features = X.shape
 
@@ -80,7 +80,9 @@ class NearestCentroid(ml.Model):
 
             else:
 
-                self.centroids_[cur_class] = torch.nanmean(X[center_mask].to(torch.float64),dim=0)
+                #self.centroids_[cur_class] = torch.nanmean(X[center_mask].to(torch.float64),dim=0)
+                #self.centroids_[cur_class] = torch.nanmean(X[center_mask],dim=0)
+                self.centroids_[cur_class] = torch.mean(X[center_mask],dim=0)
 
         return self
         
@@ -107,5 +109,6 @@ class NearestCentroid(ml.Model):
         for i in range(X.size(dim=0)):
             ret[i]= self.classes_[torch.argmin(torch.nn.PairwiseDistance(p=2)(X[i],self.centroids_))] 
         
-        return ret.to(self.y_type)
+        #return ret.to(self.y_type)
+        return ret
        

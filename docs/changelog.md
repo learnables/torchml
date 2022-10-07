@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Preliminary KNearestNeighbors implementation (@210057zzh).
+- Preliminary Ridge regression implementation (@sherrygao821).
+
 ### Changed
 
 ### Fixed
