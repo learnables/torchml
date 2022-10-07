@@ -12,8 +12,9 @@ class NearestCentroid(ml.Model):
     Euclidean metric by default. 
 
     ## References
-    1. Scikit-learn library (https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestCentroid.html)
-    2. Nearest Centroid: A Bridge between Statistics and Machine Learning https://ieeexplore.ieee.org/abstract/document/9368396
+
+    1. The scikit-learn [documentation page] (https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestCentroid.html) for nearest centroids.
+    2. M. Thulasidas, "Nearest Centroid: A Bridge between Statistics and Machine Learning," 2020 IEEE International Conference on Teaching, Assessment, and Learning for Engineering (TALE), 2020, pp. 9-16, doi: 10.1109/TALE48869.2020.9368396.
 
 
     ## Example
@@ -39,13 +40,15 @@ class NearestCentroid(ml.Model):
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         ## Description 
+
         Fit the NearestCentroid model according to the given training data.
 
         ## Arguments
-        * 'X' (torch.Tensor): array-like, sparse matrix of shape (n_samples, n_features)
+
+        * `X` (torch.Tensor): array-like, sparse matrix of shape (n_samples, n_features)
             Training vector, where `n_samples` is the number of samples and
             `n_features` is the number of features
-        * 'y' (torch.Tensor): array-like of shape (n_samples,) Target values
+        * `y` (torch.Tensor): array-like of shape (n_samples,) Target values
         """
         
         #Convert to float64 tensors
