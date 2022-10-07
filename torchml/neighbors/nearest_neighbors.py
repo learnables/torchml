@@ -98,8 +98,8 @@ class NearestNeighbors(ml.Model):
         Initialize the class with training sets
 
         ## Arguments
-        * ``X`` (torch.Tensor): the training set
-        * ``y`` (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency
+        * `X` (torch.Tensor): the training set
+        * `y` (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency
 
         """
         self.train_pts = X
