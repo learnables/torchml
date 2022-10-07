@@ -19,15 +19,14 @@ class TestkneighborsClassifier(unittest.TestCase):
             ref = neighbors.KNeighborsClassifier(weights="distance" if i % 2 else "uniform", p=i)
             ref.fit(X, y)
             refr = ref.predict(p)
-            # ref.predict_proba()
+            refp = ref.predict_proba(p)
 
             test = ml.neighbors.KNeighborsClassifier(weights="distance" if i % 2 else "uniform", p=i)
             test.fit(torch.from_numpy(X), torch.from_numpy(y))
             testr = test.predict(torch.from_numpy(p))
-
+            testp = test.predict_proba(torch.from_numpy(p))
             self.assertTrue(np.allclose(refr, testr.numpy()))
-            if not np.allclose(refr, testr.numpy()):
-                i = 0
+            self.assertTrue(np.allclose(refp, testp.numpy()))
 
             refr2 = ref.kneighbors(p)
             testr2 = test.kneighbors(torch.from_numpy(p))

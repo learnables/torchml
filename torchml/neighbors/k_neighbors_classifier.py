@@ -93,6 +93,45 @@ class KNeighborsClassifier(ml.Model):
 
         return y_pred
 
+    def predict_proba(self, X):
+        if self.weights == "uniform":
+            neigh_ind = self.KNN.kneighbors(X, return_distance=False)
+            neigh_dist = None
+        else:
+            neigh_dist, neigh_ind = self.KNN.kneighbors(X)
+
+        classes_ = self.classes_
+        _y = self._y
+        if not self.outputs_2d_:
+            _y = self._y.reshape((-1, 1))
+            classes_ = [self.classes_]
+
+        n_queries = len(X)
+
+        weights = self._get_weights(neigh_dist, self.weights)
+        if weights is None:
+            weights = torch.ones_like(neigh_ind)
+
+        all_rows = torch.arange(n_queries)
+        probabilities = []
+        for k, classes_k in enumerate(classes_):
+            pred_labels = _y[:, k][neigh_ind]
+            proba_k = torch.zeros((n_queries, len(classes_k)))
+
+            for i, idx in enumerate(pred_labels.T):
+                proba_k[all_rows, idx] += weights[:, i]
+
+            normalizer = proba_k.sum(dim=1)[:, None]
+            normalizer[normalizer == 0.0] = 1.0
+            proba_k /= normalizer
+
+            probabilities.append(proba_k)
+
+        if not self.outputs_2d_:
+            probabilities = probabilities[0]
+
+        return probabilities
+
     def kneighbors(self, X=None, n_neighbors=None, return_distance=True):
         return self.KNN.kneighbors(X=X, n_neighbors=n_neighbors, return_distance=return_distance)
 
