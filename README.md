@@ -1,8 +1,29 @@
 # torchml
 
+
+<div>
+  <p align="center">
+    <img src="docs/assets/images/logo.png" height="200"> 
+  </p>
+</div>
+
 --------------------------------------------------------------------------------
 
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
+
+## Table of contents
+* [Overview](#overview)
+* [TODOs](#todos)
+* [Getting Started](#getting-started)
+* [Tests](#tests)
+* [Docs](#docs)
+* [Torchml example usage](#torchml-example-usage)
+* [Implementation](#implementation)
+* [Installation](#installation)
+* [License](#license)
+* [Who talks about torchml](#who-talks-about-torchml)
+* [Credits](#credits)
+
 
 ## TODOs
 
