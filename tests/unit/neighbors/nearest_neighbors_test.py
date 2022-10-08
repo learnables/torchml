@@ -9,7 +9,6 @@ DIM = 5
 
 
 class Testkneighbors(unittest.TestCase):
-
     def test_kneighbors(self):
         for i in range(1, 200, 1):
             X = np.random.randn(BSZ, DIM)
@@ -38,5 +37,5 @@ class Testkneighbors(unittest.TestCase):
             self.assertTrue(np.allclose(test, res.numpy()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

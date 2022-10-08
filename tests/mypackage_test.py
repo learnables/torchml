@@ -4,7 +4,6 @@ import unittest
 
 
 class UtilTests(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -15,5 +14,5 @@ class UtilTests(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
