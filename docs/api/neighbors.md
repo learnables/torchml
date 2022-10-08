@@ -7,3 +7,12 @@
       members:
         - fit
         - kneighbors
+
+
+### ::: torchml.neighbors.KNeighborsClassifier
+    selection:
+      members:
+        - fit
+        - predict
+        - predict_proba
+        - kneighbors
