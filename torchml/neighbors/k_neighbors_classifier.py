@@ -97,7 +97,7 @@ class KNeighborsClassifier(ml.Model):
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         ## Description
-        
+
         Initialize the class with training sets
 
         ## Arguments
