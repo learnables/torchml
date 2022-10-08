@@ -61,35 +61,43 @@ class KNeighborsClassifier(ml.Model):
     """
 
     def __init__(
-            self,
-            n_neighbors=5,
-            *,
-            weights="uniform",
-            algorithm="auto",
-            leaf_size=30,
-            p=2,
-            metric="minkowski",
-            metric_params=None,
-            n_jobs=None,
+        self,
+        n_neighbors=5,
+        *,
+        weights="uniform",
+        algorithm="auto",
+        leaf_size=30,
+        p=2,
+        metric="minkowski",
+        metric_params=None,
+        n_jobs=None,
     ):
         super(KNeighborsClassifier, self).__init__()
         self._y = None
         self.classes_ = None
         self.outputs_2d_ = None
-        self.n_neighbors = n_neighbors,
-        self.algorithm = algorithm,
-        self.leaf_size = leaf_size,
-        self.metric = metric,
-        self.p = p,
-        self.metric_params = metric_params,
-        self.n_jobs = n_jobs,
+        self.n_neighbors = (n_neighbors,)
+        self.algorithm = (algorithm,)
+        self.leaf_size = (leaf_size,)
+        self.metric = (metric,)
+        self.p = (p,)
+        self.metric_params = (metric_params,)
+        self.n_jobs = (n_jobs,)
         self.weights = weights
-        self.KNN = ml.neighbors.NearestNeighbors(n_neighbors=n_neighbors, algorithm=algorithm, leaf_size=leaf_size, p=p,
-                                                 metric=metric, metric_params=metric_params, n_jobs=n_jobs)
+        self.KNN = ml.neighbors.NearestNeighbors(
+            n_neighbors=n_neighbors,
+            algorithm=algorithm,
+            leaf_size=leaf_size,
+            p=p,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+        )
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
         ## Description
+        
         Initialize the class with training sets
 
         ## Arguments
@@ -212,7 +220,12 @@ class KNeighborsClassifier(ml.Model):
 
         return probabilities
 
-    def kneighbors(self, X: torch.Tensor = None, n_neighbors: int = None, return_distance: bool = True) -> any:
+    def kneighbors(
+        self,
+        X: torch.Tensor = None,
+        n_neighbors: int = None,
+        return_distance: bool = True,
+    ) -> any:
         """
         ## Description
 
@@ -224,7 +237,9 @@ class KNeighborsClassifier(ml.Model):
         * `n_neighbors` (int, default=None): optional argument to respecify the parameter k in k nearest neighbors
         * `return_distance` (bool, default=True): returns the distances to the neighbors if true
         """
-        return self.KNN.kneighbors(X=X, n_neighbors=n_neighbors, return_distance=return_distance)
+        return self.KNN.kneighbors(
+            X=X, n_neighbors=n_neighbors, return_distance=return_distance
+        )
 
     def _check_weights(self, weights: str) -> torch.Tensor:
         if weights not in (None, "uniform", "distance") and not callable(weights):

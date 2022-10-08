@@ -9,19 +9,22 @@ DIM = 50
 
 
 class TestkneighborsClassifier(unittest.TestCase):
-
     def test_knn_classifier(self):
         for i in range(1, 200, 1):
             X = np.random.randn(BSZ, DIM)
             y = np.random.randint(low=-100, high=100, size=BSZ)
             p = np.random.randn(5, DIM)
 
-            ref = neighbors.KNeighborsClassifier(weights="distance" if i % 2 else "uniform", p=i)
+            ref = neighbors.KNeighborsClassifier(
+                weights="distance" if i % 2 else "uniform", p=i
+            )
             ref.fit(X, y)
             refr = ref.predict(p)
             refp = ref.predict_proba(p)
 
-            test = ml.neighbors.KNeighborsClassifier(weights="distance" if i % 2 else "uniform", p=i)
+            test = ml.neighbors.KNeighborsClassifier(
+                weights="distance" if i % 2 else "uniform", p=i
+            )
             test.fit(torch.from_numpy(X), torch.from_numpy(y))
             testr = test.predict(torch.from_numpy(p))
             testp = test.predict_proba(torch.from_numpy(p))
@@ -34,5 +37,5 @@ class TestkneighborsClassifier(unittest.TestCase):
             self.assertTrue(np.allclose(refr2[1], testr2[1].numpy()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
