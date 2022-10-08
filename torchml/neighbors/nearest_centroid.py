@@ -16,6 +16,12 @@ class NearestCentroid(ml.Model):
     1. The scikit-learn [documentation page] (https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestCentroid.html) for nearest centroids.
     2. M. Thulasidas, "Nearest Centroid: A Bridge between Statistics and Machine Learning," 2020 IEEE International Conference on Teaching, Assessment, and Learning for Engineering (TALE), 2020, pp. 9-16, doi: 10.1109/TALE48869.2020.9368396.
 
+    ## Arguments
+    * `metric` (str or callable, default="euclidean"):
+        Metric to use for distance computation. Only Euclidiean metric is supported for now. 
+    
+    * `shrink_threshold` (float, default=None):
+        Threshold for shrinking centroids to remove features. Not supported for now. 
 
     ## Example
 
@@ -34,8 +40,17 @@ class NearestCentroid(ml.Model):
     """
 
 
-    def __init__(self, metric="euclidean"):
+    def __init__(self, metric="euclidean", shrink_threshold=None):
+        if (metric != "euclidean"):
+            raise ValueError(
+                "The only metric supported is euclidean for now; got" + metric
+            )
+        if (shrink_threshold != None):
+            raise ValueError(
+                "shrink_threshold is not supported for now."
+            )
         self.metric = metric
+        self.shrink_threshold = shrink_threshold
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
         """
@@ -51,9 +66,6 @@ class NearestCentroid(ml.Model):
         * `y` (torch.Tensor): array-like of shape (n_samples,) Target values
         """
         
-        #Convert to float64 tensors
-        #X.to(torch.float64)
-        #y.to(torch.float64)
 
         n_samples, n_features = X.shape
 
@@ -69,7 +81,7 @@ class NearestCentroid(ml.Model):
             )
 
         # Mask mapping each class to its members.
-        self.centroids_ = torch.empty((n_classes, n_features), dtype=torch.float64)
+        self.centroids_ = torch.empty((n_classes, n_features), dtype=X.dtype, device=torch.device('cpu'))
         # Number of clusters in each class.
 
         for cur_class in range(n_classes):
@@ -79,9 +91,6 @@ class NearestCentroid(ml.Model):
                 raise ValueError("Only Euclidian is supported.")
 
             else:
-
-                #self.centroids_[cur_class] = torch.nanmean(X[center_mask].to(torch.float64),dim=0)
-                #self.centroids_[cur_class] = torch.nanmean(X[center_mask],dim=0)
                 self.centroids_[cur_class] = torch.mean(X[center_mask],dim=0)
 
         return self
