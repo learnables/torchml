@@ -33,7 +33,5 @@ setup(
     license="License :: OSI Approved :: Apache Software License",
     classifiers=[],
     scripts=[],
-    install_requires=[
-        'torch>=1.4'
-    ],
+    install_requires=["torch>=1.4"],
 )

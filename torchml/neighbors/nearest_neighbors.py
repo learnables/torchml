@@ -3,8 +3,9 @@ import torch
 import torchml as ml
 
 
-def _distance_matrix(x: torch.Tensor, y: torch.Tensor, p=2,
-                     dist_func=None) -> torch.Tensor:
+def _distance_matrix(
+    x: torch.Tensor, y: torch.Tensor, p=2, dist_func=None
+) -> torch.Tensor:
     """
     ## Description
     Internal function for generating the distance matrix
@@ -79,8 +80,18 @@ class NearestNeighbors(ml.Model):
 
     # pylint: disable=E501
 
-    def __init__(self, *, n_neighbors=5, radius=1.0, algorithm="auto", leaf_size=30, metric="minkowski", p=2,
-                 metric_params=None, n_jobs=None):
+    def __init__(
+        self,
+        *,
+        n_neighbors=5,
+        radius=1.0,
+        algorithm="auto",
+        leaf_size=30,
+        metric="minkowski",
+        p=2,
+        metric_params=None,
+        n_jobs=None
+    ):
         super(NearestNeighbors, self).__init__()
         self.train_pts = None
         self.n_neighbors = n_neighbors
@@ -104,7 +115,9 @@ class NearestNeighbors(ml.Model):
         """
         self.train_pts = X
 
-    def kneighbors(self, X: torch.Tensor, n_neighbors=None, return_distance=True) -> any:
+    def kneighbors(
+        self, X: torch.Tensor, n_neighbors=None, return_distance=True
+    ) -> any:
         """
         ## Description
 
@@ -128,9 +141,16 @@ class NearestNeighbors(ml.Model):
         elif X is None:
             raise TypeError("X is not specified")
         dist = _distance_matrix(
-            X, self.train_pts, self.p, None if isinstance(self.metric, str) else self.metric)
-        k = self.n_neighbors if self.n_neighbors <= self.train_pts.size(
-            0) else self.train_pts.size(0)
+            X,
+            self.train_pts,
+            self.p,
+            None if isinstance(self.metric, str) else self.metric,
+        )
+        k = (
+            self.n_neighbors
+            if self.n_neighbors <= self.train_pts.size(0)
+            else self.train_pts.size(0)
+        )
         knn = torch.topk(dist, k, largest=False)
         if return_distance:
             return knn.values, knn.indices
