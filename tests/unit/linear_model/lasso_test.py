@@ -10,7 +10,6 @@ DIM = 5
 
 
 class TestLasso(unittest.TestCase):
-
     def test_fit(self):
         X = np.random.randn(BSZ, DIM)
         y = np.random.randn(BSZ, 1)
@@ -24,9 +23,15 @@ class TestLasso(unittest.TestCase):
         model_preds = model.predict(torch.from_numpy(X))
         model_forward = model(torch.from_numpy(X))
 
-        self.assertTrue(np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3))
-        self.assertTrue(np.allclose(ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3))
-    
+        self.assertTrue(
+            np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3)
+        )
+        self.assertTrue(
+            np.allclose(
+                ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3
+            )
+        )
+
     def test_fit_intercept(self):
         X = np.random.randn(BSZ, DIM)
         y = np.random.randn(BSZ, 1)
@@ -40,9 +45,15 @@ class TestLasso(unittest.TestCase):
         model_preds = model.predict(torch.from_numpy(X))
         model_forward = model(torch.from_numpy(X))
 
-        self.assertTrue(np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3))
-        self.assertTrue(np.allclose(ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3))
-    
+        self.assertTrue(
+            np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3)
+        )
+        self.assertTrue(
+            np.allclose(
+                ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3
+            )
+        )
+
     def test_fit_positive(self):
         X = np.random.randn(BSZ, DIM)
         y = np.random.randn(BSZ, 1)
@@ -56,9 +67,15 @@ class TestLasso(unittest.TestCase):
         model_preds = model.predict(torch.from_numpy(X))
         model_forward = model(torch.from_numpy(X))
 
-        self.assertTrue(np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3))
-        self.assertTrue(np.allclose(ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3))
+        self.assertTrue(
+            np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3)
+        )
+        self.assertTrue(
+            np.allclose(
+                ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3
+            )
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
