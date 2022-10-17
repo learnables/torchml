@@ -13,3 +13,12 @@
       members:
         - fit
         - predict
+
+### ::: torchml.neighbors.KNeighborsClassifier
+    selection:
+      members:
+        - fit
+        - predict
+        - predict_proba
+        - kneighbors
+
