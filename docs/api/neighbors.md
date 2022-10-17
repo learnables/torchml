@@ -8,6 +8,11 @@
         - fit
         - kneighbors
 
+### ::: torchml.neighbors.NearestCentroid
+    selection:
+      members:
+        - fit
+        - predict
 
 ### ::: torchml.neighbors.KNeighborsClassifier
     selection:
@@ -16,3 +21,4 @@
         - predict
         - predict_proba
         - kneighbors
+
