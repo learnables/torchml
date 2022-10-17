@@ -17,6 +17,7 @@ class NearestCentroid(ml.Model):
     2. M. Thulasidas, "Nearest Centroid: A Bridge between Statistics and Machine Learning," 2020 IEEE International Conference on Teaching, Assessment, and Learning for Engineering (TALE), 2020, pp. 9-16, doi: 10.1109/TALE48869.2020.9368396.
 
     ## Arguments
+    
     * `metric` (str or callable, default="euclidean"):
         Metric to use for distance computation. Only Euclidiean metric is supported for now. 
     
