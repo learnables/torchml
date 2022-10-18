@@ -52,33 +52,34 @@ class LinearSVC(ml.Model):
         self.y_ = y
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
-        m, n = X.shape
-
-        w = cp.Variable(n)
-        if self.fit_intercept:
-            b = cp.Variable()
-
-        obj = 0
-        for i in range(m):
-            if y[i] == self.classes_[1]:
-                yi = 1
-            else:
-                yi = -1
-            if self.fit_intercept:
-                obj += cp.square(cp.pos(1 - yi * (w.T @ X[i] + b)))
-            else:
-                obj += cp.sqaure(cp.pos(1 - yi * (w.T @ X[i])))
-
-        obj *= self.C
-        obj += cp.multiply((1 / 2.0), cp.norm(w, 2))
-
-        prob = cp.Problem(cp.Minimize(obj), [])
-        prob.solve()
-        self.coef_, self.intercept_ = torch.from_numpy(w.value), torch.from_numpy(b.value)
+        # m, n = X.shape
+        #
+        # w = cp.Variable(n)
+        # if self.fit_intercept:
+        #     b = cp.Variable()
+        #
+        # obj = 0
+        # for i in range(m):
+        #     if y[i] == self.classes_[1]:
+        #         yi = 1
+        #     else:
+        #         yi = -1
+        #     if self.fit_intercept:
+        #         obj += cp.square(cp.pos(1 - yi * (w.T @ X[i] + b)))
+        #     else:
+        #         obj += cp.sqaure(cp.pos(1 - yi * (w.T @ X[i])))
+        #
+        # obj *= self.C
+        # obj += cp.multiply((1 / 2.0), cp.norm(w, 2))
+        #
+        # prob = cp.Problem(cp.Minimize(obj), [])
+        # prob.solve()
+        # self.coef_, self.intercept_ = torch.from_numpy(w.value), torch.from_numpy(b.value)
         # if self.fit_intercept:
         #     fit_lr = CvxpyLayer(prob, [], [w, b])
         # else:
         #     fit_lr = CvxpyLayer(prob, [], [w])
         #
         # self.weight, self.intercept = fit_lr()
+
         return self
