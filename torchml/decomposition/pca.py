@@ -54,7 +54,18 @@ class PCA(ml.Model):
         pca.fit(X)
         ~~~
         """
-        self.U, self.S, self.V = torch.pca_lowrank(X, q=self.n_components)
+        # Center data
+        X -= X.mean(dim=0)
+
+        # Compute SVD
+        U, S, V = torch.svd(X, some=False)
+
+        # flip eigenvectors' sign to enforce deterministic output
+        max_abs_cols = U.abs().argmax(dim=0)
+        U *= torch.sign(U[max_abs_cols, range(U.shape[1])])
+
+        self.U = U
+        self.S = S
         return self
 
     def fit_transform(self, X):
