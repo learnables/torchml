@@ -81,5 +81,62 @@ class LinearSVC(ml.Model):
         #     fit_lr = CvxpyLayer(prob, [], [w])
         #
         # self.weight, self.intercept = fit_lr()
+        y = torch.unsqueeze(y, 1)
 
+        y = (y == self.classes_[1]).float()
+        y *= 2
+        y -= 1
+
+        m, n = X.shape
+
+        w = cp.Variable((n, 1))
+        if self.fit_intercept:
+            b = cp.Variable()
+        X_param = cp.Parameter((m, n))
+        y_param = cp.Parameter((m, 1))
+        C_param = cp.Parameter(nonneg=True)
+        ones = torch.ones((m, 1))
+
+        # set up objective
+        if self.fit_intercept:
+            loss = cp.multiply((1 / 2.0),
+                               cp.norm(w, 2)) + C_param * cp.sum(cp.square(cp.pos(ones -
+                                                                                   cp.multiply(y_param,
+                                                                                               X_param @ w + b))))
+        else:
+            loss = (1 / (2 * m)) * cp.sum(cp.square(X_param @ w - y_param))
+
+        objective = loss
+
+        # set up constraints
+        constraints = []
+
+        prob = cp.Problem(cp.Minimize(objective), constraints)
+        X_param.value = X.numpy()
+        y_param.value = y.numpy()
+        C_param.value = self.C
+        prob.solve(solver='ECOS', abstol=self.tol, max_iters=self.max_iter)
+
+        # convert into pytorch layer
+        # if self.fit_intercept:
+        #     fit_lr = CvxpyLayer(prob, [X_param, y_param, C_param], [w, b])
+        # else:
+        #     fit_lr = CvxpyLayer(prob, [X_param, y_param, C_param], [w])
+
+        # process input data
+        # if self.require_grad:
+        #     X.requires_grad_(True)
+        #     y.requires_grad_(True)
+
+        # this object is now callable with pytorch tensors
+
+        # if self.fit_intercept:
+        #     self.weight, self.intercept = fit_lr(
+        #         X, y, self.C
+        #     )
+        # else:
+        #     self.weight = fit_lr(X, y, torch.tensor(
+        #         self.alpha, dtype=torch.float64))
+        self.coef_, self.intercept_ = torch.from_numpy(w.value), torch.from_numpy(b.value)
+        self.coef_ = torch.t(self.coef_)
         return self
