@@ -1,6 +1,4 @@
-""" A PyTorch implementation of Principal Component Analysis (PCA) 
-References: https://github.com/Linardos/PyTorch/blob/master/TorchPCA.py
-"""
+""" A PyTorch implementation of Principal Component Analysis (PCA) """
 import torch
 
 import torchml as ml
@@ -53,7 +51,7 @@ class PCA(ml.Model):
 
         ~~~python
         pca = PCA()
-        pca.fit(X_train)
+        pca.fit(X)
         ~~~
         """
         self.U, self.S, self.V = torch.pca_lowrank(X, q=self.n_components)
@@ -73,4 +71,4 @@ class PCA(ml.Model):
         ~~~
         """
         self.fit(X)
-        return self.U[:, :self.n_components] * self.S[:self.n_components]
+        return self.U[:, : self.n_components] * self.S[: self.n_components]
