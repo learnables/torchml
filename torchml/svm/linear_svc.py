@@ -52,38 +52,9 @@ class LinearSVC(ml.Model):
         self.y_ = y
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
-        # m, n = X.shape
-        #
-        # w = cp.Variable(n)
-        # if self.fit_intercept:
-        #     b = cp.Variable()
-        #
-        # obj = 0
-        # for i in range(m):
-        #     if y[i] == self.classes_[1]:
-        #         yi = 1
-        #     else:
-        #         yi = -1
-        #     if self.fit_intercept:
-        #         obj += cp.square(cp.pos(1 - yi * (w.T @ X[i] + b)))
-        #     else:
-        #         obj += cp.sqaure(cp.pos(1 - yi * (w.T @ X[i])))
-        #
-        # obj *= self.C
-        # obj += cp.multiply((1 / 2.0), cp.norm(w, 2))
-        #
-        # prob = cp.Problem(cp.Minimize(obj), [])
-        # prob.solve()
-        # self.coef_, self.intercept_ = torch.from_numpy(w.value), torch.from_numpy(b.value)
-        # if self.fit_intercept:
-        #     fit_lr = CvxpyLayer(prob, [], [w, b])
-        # else:
-        #     fit_lr = CvxpyLayer(prob, [], [w])
-        #
-        # self.weight, self.intercept = fit_lr()
         y = torch.unsqueeze(y, 1)
 
-        y = (y == self.classes_[1]).float()
+        y = (y != self.classes_[0]).float()
         y *= 2
         y -= 1
 
@@ -97,15 +68,27 @@ class LinearSVC(ml.Model):
         C_param = cp.Parameter(nonneg=True)
         ones = torch.ones((m, 1))
 
+        loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
+
         # set up objective
         if self.fit_intercept:
-            loss = cp.multiply((1 / 2.0),
-                               cp.norm(w, 2)) + C_param * cp.sum(cp.square(cp.pos(ones -
-                                                                                   cp.multiply(y_param,
-                                                                                               X_param @ w + b))))
+            if self.loss == "squared_hinge":
+                loss += C_param * cp.sum(cp.square(cp.pos(ones -
+                                                          cp.multiply(y_param,
+                                                                      X_param @ w + b))))
+            elif self.loss == "hinge":
+                loss += C_param * cp.sum(cp.pos(ones -
+                                                cp.multiply(y_param,
+                                                            X_param @ w + b)))
         else:
-            loss = (1 / (2 * m)) * cp.sum(cp.square(X_param @ w - y_param))
-
+            if self.loss == "squared_hinge":
+                loss += C_param * cp.sum(cp.square(cp.pos(ones -
+                                                          cp.multiply(y_param,
+                                                                      X_param @ w))))
+            elif self.loss == "hinge":
+                loss += C_param * cp.sum(cp.pos(ones -
+                                                cp.multiply(y_param,
+                                                            X_param @ w)))
         objective = loss
 
         # set up constraints
