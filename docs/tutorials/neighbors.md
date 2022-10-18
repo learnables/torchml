@@ -63,7 +63,7 @@ substitute both $P(x|c_c) = {{nk_c}\over{n_c V}}$ and $P(x) = {{k}\over{nV}}$ in
 $P(c_c | x)= {nk_c\over k}$
 
 ## Sources
-* Christopher M. Bishop. 2006. Pattern Recognition and Machine Learning (Information Science and Statistics). Springer-Verlag, Berlin, Heidelberg.
+* [Christopher M. Bishop. 2006. Pattern Recognition and Machine Learning (Information Science and Statistics). Springer-Verlag, Berlin, Heidelberg.](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
 * [MIT Lecture on KNN](https://youtu.be/09mb78oiPkA)
 
  
