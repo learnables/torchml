@@ -9,28 +9,26 @@ from sklearn import svm
 
 
 class LinearSVC(ml.Model):
-
     def __init__(
-            self,
-            penalty="l2",
-            loss="squared_hinge",
-            *,
-            dual=True,
-            tol=1e-4,
-            C=1.0,
-            multi_class="ovr",
-            fit_intercept=True,
-            intercept_scaling=1,
-            class_weight=None,
-            verbose=0,
-            random_state=None,
-            max_iter=1000,
+        self,
+        penalty="l2",
+        loss="squared_hinge",
+        *,
+        dual=True,
+        tol=1e-4,
+        C=1.0,
+        multi_class="ovr",
+        fit_intercept=True,
+        intercept_scaling=1,
+        class_weight=None,
+        verbose=0,
+        random_state=None,
+        max_iter=1000,
     ):
         super(LinearSVC, self).__init__()
         self.coef_ = None
         self.intercept_ = None
         self.classes_ = None
-        self.y_ = None
         self.dual = dual
         self.tol = tol
         self.C = C
@@ -46,19 +44,20 @@ class LinearSVC(ml.Model):
 
     def fit(self, X: torch.Tensor, y: torch.Tensor, sample_weight=None):
         if self.C < 0:
-            raise ValueError(
-                "Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
         self.classes_ = torch.unique(y)
-        self.y_ = y
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
+
+        m, n = X.shape
+
+        self.coef_ = torch.empty((0, n))
+        self.intercept_ = torch.empty((0))
 
         y = torch.unsqueeze(y, 1)
 
         y = (y != self.classes_[0]).float()
         y *= 2
         y -= 1
-
-        m, n = X.shape
 
         w = cp.Variable((n, 1))
         if self.fit_intercept:
@@ -70,25 +69,16 @@ class LinearSVC(ml.Model):
 
         loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
 
-        # set up objective
         if self.fit_intercept:
-            if self.loss == "squared_hinge":
-                loss += C_param * cp.sum(cp.square(cp.pos(ones -
-                                                          cp.multiply(y_param,
-                                                                      X_param @ w + b))))
-            elif self.loss == "hinge":
-                loss += C_param * cp.sum(cp.pos(ones -
-                                                cp.multiply(y_param,
-                                                            X_param @ w + b)))
+            hinge = cp.pos(ones - cp.multiply(y_param, X_param @ w + b))
         else:
-            if self.loss == "squared_hinge":
-                loss += C_param * cp.sum(cp.square(cp.pos(ones -
-                                                          cp.multiply(y_param,
-                                                                      X_param @ w))))
-            elif self.loss == "hinge":
-                loss += C_param * cp.sum(cp.pos(ones -
-                                                cp.multiply(y_param,
-                                                            X_param @ w)))
+            hinge = cp.pos(ones - cp.multiply(y_param, X_param @ w))
+
+        if self.loss == "squared_hinge":
+            loss += C_param * cp.sum(cp.square(hinge))
+        elif self.loss == "hinge":
+            loss += C_param * cp.sum(hinge)
+
         objective = loss
 
         # set up constraints
@@ -98,28 +88,10 @@ class LinearSVC(ml.Model):
         X_param.value = X.numpy()
         y_param.value = y.numpy()
         C_param.value = self.C
-        prob.solve(solver='ECOS', abstol=self.tol, max_iters=self.max_iter)
+        prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
 
-        # convert into pytorch layer
-        # if self.fit_intercept:
-        #     fit_lr = CvxpyLayer(prob, [X_param, y_param, C_param], [w, b])
-        # else:
-        #     fit_lr = CvxpyLayer(prob, [X_param, y_param, C_param], [w])
-
-        # process input data
-        # if self.require_grad:
-        #     X.requires_grad_(True)
-        #     y.requires_grad_(True)
-
-        # this object is now callable with pytorch tensors
-
-        # if self.fit_intercept:
-        #     self.weight, self.intercept = fit_lr(
-        #         X, y, self.C
-        #     )
-        # else:
-        #     self.weight = fit_lr(X, y, torch.tensor(
-        #         self.alpha, dtype=torch.float64))
-        self.coef_, self.intercept_ = torch.from_numpy(w.value), torch.from_numpy(b.value)
-        self.coef_ = torch.t(self.coef_)
+        self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
+        self.intercept_ = torch.cat(
+            (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
+        )
         return self
