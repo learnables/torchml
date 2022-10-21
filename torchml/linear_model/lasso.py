@@ -119,7 +119,9 @@ class Lasso(ml.Model):
 
         # this object is now callable with pytorch tensors
         if self.fit_intercept:
-            self.weight, self.intercept = fit_lr(X, y, torch.tensor(self.alpha, dtype=torch.float64))
+            self.weight, self.intercept = fit_lr(
+                X, y, torch.tensor(self.alpha, dtype=torch.float64)
+            )
         else:
             self.weight = fit_lr(X, y, torch.tensor(self.alpha, dtype=torch.float64))
         self.weight = torch.stack(list(self.weight), dim=0)

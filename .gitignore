@@ -133,4 +133,5 @@ docs/mkdocs.yml
 log_install.txt
 .vscode/
 .idea/
-.all_objects.cache
+.all_objects.cache.DS_Store
+.DS_Store
