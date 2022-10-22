@@ -5,36 +5,37 @@ from sklearn.datasets import make_classification
 import sklearn.svm as svm
 import time
 
-import torchml as ml
 from torchml.svm import LinearSVC
 
 n_samples = 5000
 n_features = 10
-n_classes = 2
-n_informative = 8
+n_classes = 5
+n_informative = 10
 
 
 class TestLinearSVC(unittest.TestCase):
-    def test_simple(self):
+    def test_LinearSVC(self):
         x, y = make_classification(
             n_samples=n_samples,
             n_features=n_features,
             n_classes=n_classes,
             n_informative=n_informative,
+            n_redundant=n_features-n_informative
         )
         lsvc = LinearSVC(max_iter=1000)
         start = time.time()
         lsvc.fit(torch.from_numpy(x), torch.from_numpy(y))
         end = time.time()
-        print(end - start)
+        # print(end - start)
         start = time.time()
-        reflsvc = svm.LinearSVC(max_iter=1000)
+        reflsvc = svm.LinearSVC(max_iter=100000)
         reflsvc.fit(x, y)
         end = time.time()
-        print(end - start)
-        self.assertTrue(np.allclose(lsvc.coef_.numpy(), reflsvc.coef_, atol=0.03))
+        # print(end - start)
+        self.assertTrue(np.allclose(
+            lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
         self.assertTrue(
-            np.allclose(lsvc.intercept_.numpy(), reflsvc.intercept_, atol=0.03)
+            np.allclose(lsvc.intercept_.numpy(), reflsvc.intercept_, atol=1e-2)
         )
 
 

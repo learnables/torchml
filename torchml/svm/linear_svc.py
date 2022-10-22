@@ -1,29 +1,25 @@
 import torch
-from sklearn.datasets import make_classification
 
 import torchml as ml
 import cvxpy as cp
-from cvxpylayers.torch import CvxpyLayer
-
-from sklearn import svm
 
 
 class LinearSVC(ml.Model):
     def __init__(
-        self,
-        penalty="l2",
-        loss="squared_hinge",
-        *,
-        dual=True,
-        tol=1e-4,
-        C=1.0,
-        multi_class="ovr",
-        fit_intercept=True,
-        intercept_scaling=1,
-        class_weight=None,
-        verbose=0,
-        random_state=None,
-        max_iter=1000,
+            self,
+            penalty="l2",
+            loss="squared_hinge",
+            *,
+            dual=True,
+            tol=1e-4,
+            C=1.0,
+            multi_class="ovr",
+            fit_intercept=True,
+            intercept_scaling=1,
+            class_weight=None,
+            verbose=0,
+            random_state=None,
+            max_iter=1000,
     ):
         super(LinearSVC, self).__init__()
         self.coef_ = None
@@ -47,15 +43,22 @@ class LinearSVC(ml.Model):
             raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
         self.classes_ = torch.unique(y)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
+        m, n = X.shape
+        self.coef_ = torch.empty((0, n))
+        self.intercept_ = torch.empty((0))
+        if self.classes_.shape[0] == 2:
+            self.fit_with_one_class_(X, y, self.classes_[1], sample_weight=sample_weight)
+        else:
+            for i, x in enumerate(self.classes_):
+                self.fit_with_one_class_(X, y, x, sample_weight=sample_weight)
+
+    def fit_with_one_class_(self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None):
 
         m, n = X.shape
 
-        self.coef_ = torch.empty((0, n))
-        self.intercept_ = torch.empty((0))
-
         y = torch.unsqueeze(y, 1)
 
-        y = (y != self.classes_[0]).float()
+        y = (y == fitting_class).float()
         y *= 2
         y -= 1
 
@@ -91,7 +94,8 @@ class LinearSVC(ml.Model):
         prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
 
         self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
-        self.intercept_ = torch.cat(
-            (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
-        )
+        if self.fit_intercept:
+            self.intercept_ = torch.cat(
+                (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
+            )
         return self
