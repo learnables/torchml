@@ -40,19 +40,45 @@ class LinearSVC(ml.Model):
 
     def fit(self, X: torch.Tensor, y: torch.Tensor, sample_weight=None):
         if self.C < 0:
-            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError(
+                "Penalty term must be positive; got (C=%r)" % self.C)
         self.classes_ = torch.unique(y)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
         self.coef_ = torch.empty((0, n))
         self.intercept_ = torch.empty((0))
         if self.classes_.shape[0] == 2:
-            self.fit_with_one_class_(X, y, self.classes_[1], sample_weight=sample_weight)
+            self._fit_with_one_class(
+                X, y, self.classes_[1], sample_weight=sample_weight)
         else:
             for i, x in enumerate(self.classes_):
-                self.fit_with_one_class_(X, y, x, sample_weight=sample_weight)
+                self._fit_with_one_class(X, y, x, sample_weight=sample_weight)
 
-    def fit_with_one_class_(self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None):
+    def decision_function(self, X : torch.Tensor) -> torch.Tensor:
+        return X @ self.coef_.T + self.intercept_
+
+    def predict(self, X: torch.Tensor) -> torch.Tensor:
+        """
+        Predict class labels for samples in X.
+
+        Parameters
+        ----------
+        X : {array-like, sparse matrix} of shape (n_samples, n_features)
+            The data matrix for which we want to get the predictions.
+
+        Returns
+        -------
+        y_pred : ndarray of shape (n_samples,)
+            Vector containing the class labels for each sample.
+        """
+        scores = self.decision_function(X)
+        if len(scores.shape) == 1:
+            indices = (scores > 0).int()
+        else:
+            indices = scores.argmax(dim=1)
+        return self.classes_[indices]
+
+    def _fit_with_one_class(self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None):
 
         m, n = X.shape
 
@@ -93,7 +119,8 @@ class LinearSVC(ml.Model):
         C_param.value = self.C
         prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
 
-        self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
+        self.coef_ = torch.cat(
+            (self.coef_, torch.t(torch.from_numpy(w.value))))
         if self.fit_intercept:
             self.intercept_ = torch.cat(
                 (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
