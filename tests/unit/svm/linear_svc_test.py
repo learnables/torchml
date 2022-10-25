@@ -10,7 +10,7 @@ from torchml.svm import LinearSVC
 n_samples = 5000
 n_features = 10
 n_classes = 5
-n_informative = 10
+n_informative = 7
 
 
 class TestLinearSVC(unittest.TestCase):
