@@ -6,20 +6,20 @@ import cvxpy as cp
 
 class LinearSVC(ml.Model):
     def __init__(
-            self,
-            penalty="l2",
-            loss="squared_hinge",
-            *,
-            dual=True,
-            tol=1e-4,
-            C=1.0,
-            multi_class="ovr",
-            fit_intercept=True,
-            intercept_scaling=1,
-            class_weight=None,
-            verbose=0,
-            random_state=None,
-            max_iter=1000,
+        self,
+        penalty="l2",
+        loss="squared_hinge",
+        *,
+        dual=True,
+        tol=1e-4,
+        C=1.0,
+        multi_class="ovr",
+        fit_intercept=True,
+        intercept_scaling=1,
+        class_weight=None,
+        verbose=0,
+        random_state=None,
+        max_iter=1000,
     ):
         super(LinearSVC, self).__init__()
         self.coef_ = None
@@ -40,8 +40,7 @@ class LinearSVC(ml.Model):
 
     def fit(self, X: torch.Tensor, y: torch.Tensor, sample_weight=None):
         if self.C < 0:
-            raise ValueError(
-                "Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
         self.classes_ = torch.unique(y)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
@@ -49,12 +48,13 @@ class LinearSVC(ml.Model):
         self.intercept_ = torch.empty((0))
         if self.classes_.shape[0] == 2:
             self._fit_with_one_class(
-                X, y, self.classes_[1], sample_weight=sample_weight)
+                X, y, self.classes_[1], sample_weight=sample_weight
+            )
         else:
             for i, x in enumerate(self.classes_):
                 self._fit_with_one_class(X, y, x, sample_weight=sample_weight)
 
-    def decision_function(self, X : torch.Tensor) -> torch.Tensor:
+    def decision_function(self, X: torch.Tensor) -> torch.Tensor:
         return X @ self.coef_.T + self.intercept_
 
     def predict(self, X: torch.Tensor) -> torch.Tensor:
@@ -78,7 +78,9 @@ class LinearSVC(ml.Model):
             indices = scores.argmax(dim=1)
         return self.classes_[indices]
 
-    def _fit_with_one_class(self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None):
+    def _fit_with_one_class(
+        self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
+    ):
 
         m, n = X.shape
 
@@ -119,8 +121,7 @@ class LinearSVC(ml.Model):
         C_param.value = self.C
         prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
 
-        self.coef_ = torch.cat(
-            (self.coef_, torch.t(torch.from_numpy(w.value))))
+        self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
         if self.fit_intercept:
             self.intercept_ = torch.cat(
                 (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))

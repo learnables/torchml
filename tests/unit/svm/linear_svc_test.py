@@ -20,7 +20,7 @@ class TestLinearSVC(unittest.TestCase):
             n_features=n_features,
             n_classes=n_classes,
             n_informative=n_informative,
-            n_redundant=n_features - n_informative
+            n_redundant=n_features - n_informative,
         )
         lsvc = LinearSVC(max_iter=1000)
         start = time.time()
@@ -33,16 +33,21 @@ class TestLinearSVC(unittest.TestCase):
 
         end = time.time()
         # print(end - start)
-        self.assertTrue(np.allclose(
-            lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
+        self.assertTrue(np.allclose(lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
         self.assertTrue(
             np.allclose(lsvc.intercept_.numpy(), reflsvc.intercept_, atol=1e-2)
         )
         self.assertTrue(
-            np.allclose(lsvc.decision_function(torch.from_numpy(x)), reflsvc.decision_function(x), atol=1e-2)
+            np.allclose(
+                lsvc.decision_function(torch.from_numpy(x)),
+                reflsvc.decision_function(x),
+                atol=1e-2,
+            )
         )
         self.assertTrue(
-            np.allclose(lsvc.predict(torch.from_numpy(x)), reflsvc.predict(x), atol=1e-2)
+            np.allclose(
+                lsvc.predict(torch.from_numpy(x)), reflsvc.predict(x), atol=1e-2
+            )
         )
 
 
