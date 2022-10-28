@@ -14,7 +14,7 @@ class PCA(ml.Model):
 
     ## References
 
-    1. https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+    1. The scikit-learn [documentation page] (https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html)
     2. Nathan Halko, Per-Gunnar Martinsson, and Joel Tropp, Finding structure with randomness: probabilistic algorithms for constructing approximate matrix decompositions, arXiv:0909.4061 [math.NA; math.PR], 2009.
 
     ## Arguments
