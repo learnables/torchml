@@ -18,7 +18,6 @@ class RBFSampler(ml.Model):
         self.random_state = random_state
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
-        # TODO: validate parameter
         n_features = X.size(dim=1)
 
         # get random seed
@@ -28,7 +27,7 @@ class RBFSampler(ml.Model):
         else:
             torch.manual_seed(seed)
 
-        self.random_weights_ = ((2 * self.gamma) ** 2) * torch.empty((n_features, self.n_components)).normal_()
+        self.random_weights_ = math.sqrt(self.gamma * 2) * torch.empty((n_features, self.n_components)).normal_()
         self.random_offset_ = torch.empty((self.n_components)).uniform_(0, 2 * math.pi)
 
         if X.dtype == torch.float64:
@@ -47,7 +46,7 @@ class RBFSampler(ml.Model):
         projection = torch.mm(X, self.random_weights_)
         projection += self.random_offset_
         projection = torch.cos(projection)
-        projection *= (2 ** 2) / (self.n_components ** self.n_components)
+        projection *= math.sqrt(2.0) / math.sqrt(self.n_components)
         return projection
 
     def fit_transform(self, X: torch.Tensor, y: torch.Tensor):
