@@ -18,6 +18,7 @@ class RBFSampler():
         self.n_components = n_components
         self.random_normal_matrix = random_normal_matrix
         self.random_uniform_matrix = random_uniform_matrix
+        self.random_weights_ = None
 
     
     def fit(self, X: torch.Tensor, y: torch.Tensor or None = None):
@@ -30,6 +31,8 @@ class RBFSampler():
         return self
     
     def transform(self, X: torch.Tensor):
+        assert self.random_weights_ is not None, "This RBFSampler instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator."
+            
         projection = torch.mm(X, self.random_weights_)
         projection += self.random_offset_
         projection = torch.cos(projection)

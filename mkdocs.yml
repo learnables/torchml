@@ -5,6 +5,7 @@ nav:
     - torchml: api/index.md
     - torchml.linear_model: api/linear_model.md
     - torchml.neighbors: api/neighbors.md
+    - torchml.kernel_approximations: api/kernel_approximations.md
   - Changelog: changelog.md
   - GitHub: https://github.com/learnables/mypackage/
 
