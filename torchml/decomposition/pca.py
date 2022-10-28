@@ -20,6 +20,7 @@ class PCA(ml.Model):
     ## Arguments
 
     * n_components (int), default=None
+    * svd_solver (string), default="full"
 
     ## Example
 
@@ -37,9 +38,11 @@ class PCA(ml.Model):
         self,
         *,
         n_components=None,
+        svd_solver="full",
     ):
         super(PCA, self).__init__()
         self.n_components = n_components
+        self.svd_solver = svd_solver
 
     def fit(self, X):
         """Fit the model with X.
@@ -58,7 +61,8 @@ class PCA(ml.Model):
         X -= X.mean(dim=0)
 
         # Compute SVD
-        U, S, V = torch.svd(X, some=False)
+        randomized = True if self.svd_solver == "randomized" else False
+        U, S, V = torch.svd(X, some=randomized)
 
         # flip eigenvectors' sign to enforce deterministic output
         max_abs_cols = U.abs().argmax(dim=0)
