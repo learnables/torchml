@@ -20,3 +20,9 @@
       members:
         - fit
         - predict
+
+### ::: torchml.linear_model.LogisticRegression
+    selection:
+      members:
+        - fit
+        - predict
