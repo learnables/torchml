@@ -8,7 +8,7 @@ class LinearSVC(ml.Model):
     """
     ## Description
 
-    Unsupervised learner for implementing KNN Classifier.
+    Support vector classifier with cvxpy
 
     ## References
 
@@ -121,7 +121,8 @@ class LinearSVC(ml.Model):
 
         """
         if self.C < 0:
-            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError(
+                "Penalty term must be positive; got (C=%r)" % self.C)
         self.classes_ = torch.unique(y)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
@@ -207,7 +208,8 @@ class LinearSVC(ml.Model):
         C_param.value = self.C
         prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
 
-        self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
+        self.coef_ = torch.cat(
+            (self.coef_, torch.t(torch.from_numpy(w.value))))
         if self.fit_intercept:
             self.intercept_ = torch.cat(
                 (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
