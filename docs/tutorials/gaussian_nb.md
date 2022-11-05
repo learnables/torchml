@@ -1,5 +1,7 @@
 # Gaussian Naive Bayes
 
+by [Lucy X. Shi](https://lucys0.github.io/), on November 1, 2022.
+
 ## Introduction
 
 Gaussian Naive Bayes is a supervised learning algorithm based on applying Bayes’ theorem with the “naive” assumption of conditional independence between every pair of features given the value of the class variable. It is typically used for classification.
