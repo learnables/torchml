@@ -7,7 +7,7 @@ import time
 
 from torchml.svm import LinearSVC
 
-n_samples = 1000
+n_samples = 4000
 n_features = 5
 n_classes = 5
 n_informative = 5
@@ -33,7 +33,8 @@ class TestLinearSVC(unittest.TestCase):
 
         end = time.time()
         # print(end - start)
-        self.assertTrue(np.allclose(lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
+        self.assertTrue(np.allclose(
+            lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
         self.assertTrue(
             np.allclose(lsvc.intercept_.numpy(), reflsvc.intercept_, atol=1e-2)
         )
