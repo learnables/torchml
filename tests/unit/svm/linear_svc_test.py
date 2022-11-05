@@ -8,9 +8,9 @@ import time
 from torchml.svm import LinearSVC
 
 n_samples = 5000
-n_features = 10
+n_features = 5
 n_classes = 5
-n_informative = 7
+n_informative = 5
 
 
 class TestLinearSVC(unittest.TestCase):

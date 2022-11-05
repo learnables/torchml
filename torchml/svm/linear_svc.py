@@ -2,6 +2,7 @@ import torch
 
 import torchml as ml
 import cvxpy as cp
+from cvxpylayers.torch import CvxpyLayer
 
 
 class LinearSVC(ml.Model):
@@ -94,21 +95,19 @@ class LinearSVC(ml.Model):
         if self.fit_intercept:
             b = cp.Variable()
         X_param = cp.Parameter((m, n))
-        y_param = cp.Parameter((m, 1))
-        C_param = cp.Parameter(nonneg=True)
         ones = torch.ones((m, 1))
 
         loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
 
         if self.fit_intercept:
-            hinge = cp.pos(ones - cp.multiply(y_param, X_param @ w + b))
+            hinge = cp.pos(ones - cp.multiply(y, X_param @ w + b))
         else:
-            hinge = cp.pos(ones - cp.multiply(y_param, X_param @ w))
+            hinge = cp.pos(ones - cp.multiply(y, X_param @ w))
 
         if self.loss == "squared_hinge":
-            loss += C_param * cp.sum(cp.square(hinge))
+            loss += cp.multiply(self.C,  cp.sum(cp.square(hinge)))
         elif self.loss == "hinge":
-            loss += C_param * cp.sum(hinge)
+            loss += cp.multiply(self.C, cp.sum(hinge))
 
         objective = loss
 
@@ -116,14 +115,25 @@ class LinearSVC(ml.Model):
         constraints = []
 
         prob = cp.Problem(cp.Minimize(objective), constraints)
-        X_param.value = X.numpy()
-        y_param.value = y.numpy()
-        C_param.value = self.C
-        prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
+        assert prob.is_dpp()
 
-        self.coef_ = torch.cat((self.coef_, torch.t(torch.from_numpy(w.value))))
+        # convert into pytorch layer
+        if self.fit_intercept:
+            fit_lr = CvxpyLayer(prob, [X_param], [w, b])
+        else:
+            fit_lr = CvxpyLayer(prob, [X_param], [w])
+
+        # prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
+        if self.fit_intercept:
+            weight, intercept = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol, "max_iters": self.max_iter})
+        else:
+            weight = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol, "max_iters": self.max_iter})
+
+        self.coef_ = torch.cat((self.coef_, torch.t(weight)))
+
+
         if self.fit_intercept:
             self.intercept_ = torch.cat(
-                (self.intercept_, torch.unsqueeze(torch.from_numpy(b.value), 0))
+                (self.intercept_, torch.unsqueeze(intercept, 0))
             )
         return self
