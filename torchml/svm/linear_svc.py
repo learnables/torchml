@@ -147,7 +147,7 @@ class LinearSVC(ml.Model):
 
         """
         scores = X @ self.coef_.T + self.intercept_
-        return scores.ravel() if scores.shape[1] == 1 else scores 
+        return scores.ravel() if scores.shape[1] == 1 else scores
 
     def predict(self, X: torch.Tensor) -> torch.Tensor:
         """
@@ -167,9 +167,8 @@ class LinearSVC(ml.Model):
         return self.classes_[indices]
 
     def _fit_with_one_class(
-            self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
+        self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
     ):
-
         m, n = X.shape
 
         y = torch.unsqueeze(y, 1)
@@ -212,10 +211,23 @@ class LinearSVC(ml.Model):
 
         # prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
         if self.fit_intercept:
-            weight, intercept = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol,
-                                                       "max_iters": self.max_iter})
+            weight, intercept = fit_lr(
+                X,
+                solver_args={
+                    "solve_method": "ECOS",
+                    "abstol": self.tol,
+                    "max_iters": self.max_iter,
+                },
+            )
         else:
-            weight = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol, "max_iters": self.max_iter})
+            weight = fit_lr(
+                X,
+                solver_args={
+                    "solve_method": "ECOS",
+                    "abstol": self.tol,
+                    "max_iters": self.max_iter,
+                },
+            )
 
         self.coef_ = torch.cat((self.coef_, torch.t(weight)))
 
