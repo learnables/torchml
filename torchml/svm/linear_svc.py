@@ -7,20 +7,20 @@ from cvxpylayers.torch import CvxpyLayer
 
 class LinearSVC(ml.Model):
     def __init__(
-        self,
-        penalty="l2",
-        loss="squared_hinge",
-        *,
-        dual=True,
-        tol=1e-4,
-        C=1.0,
-        multi_class="ovr",
-        fit_intercept=True,
-        intercept_scaling=1,
-        class_weight=None,
-        verbose=0,
-        random_state=None,
-        max_iter=1000,
+            self,
+            penalty="l2",
+            loss="squared_hinge",
+            *,
+            dual=True,
+            tol=1e-4,
+            C=1.0,
+            multi_class="ovr",
+            fit_intercept=True,
+            intercept_scaling=1,
+            class_weight=None,
+            verbose=0,
+            random_state=None,
+            max_iter=1000,
     ):
         super(LinearSVC, self).__init__()
         self.coef_ = None
@@ -56,7 +56,8 @@ class LinearSVC(ml.Model):
                 self._fit_with_one_class(X, y, x, sample_weight=sample_weight)
 
     def decision_function(self, X: torch.Tensor) -> torch.Tensor:
-        return X @ self.coef_.T + self.intercept_
+        scores = X @ self.coef_.T + self.intercept_
+        return scores.ravel() if scores.shape[1] == 1 else scores
 
     def predict(self, X: torch.Tensor) -> torch.Tensor:
         """
@@ -74,13 +75,13 @@ class LinearSVC(ml.Model):
         """
         scores = self.decision_function(X)
         if len(scores.shape) == 1:
-            indices = (scores > 0).int()
+            indices = (scores > 0).long()
         else:
             indices = scores.argmax(dim=1)
         return self.classes_[indices]
 
     def _fit_with_one_class(
-        self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
+            self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
     ):
 
         m, n = X.shape
@@ -105,7 +106,7 @@ class LinearSVC(ml.Model):
             hinge = cp.pos(ones - cp.multiply(y, X_param @ w))
 
         if self.loss == "squared_hinge":
-            loss += cp.multiply(self.C,  cp.sum(cp.square(hinge)))
+            loss += cp.multiply(self.C, cp.sum(cp.square(hinge)))
         elif self.loss == "hinge":
             loss += cp.multiply(self.C, cp.sum(hinge))
 
@@ -125,12 +126,12 @@ class LinearSVC(ml.Model):
 
         # prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
         if self.fit_intercept:
-            weight, intercept = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol, "max_iters": self.max_iter})
+            weight, intercept = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol,
+                                                       "max_iters": self.max_iter})
         else:
             weight = fit_lr(X, solver_args={"solve_method": "ECOS", "abstol": self.tol, "max_iters": self.max_iter})
 
         self.coef_ = torch.cat((self.coef_, torch.t(weight)))
-
 
         if self.fit_intercept:
             self.intercept_ = torch.cat(
