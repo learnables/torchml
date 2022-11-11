@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torchml as ml
 import sklearn.linear_model as linear_model
+from torch.autograd import gradcheck
 
 
 BSZ = 128
@@ -25,6 +26,11 @@ class TestLinearRegression(unittest.TestCase):
 
         self.assertTrue(np.allclose(ref_preds, model_preds.numpy()))
         self.assertTrue(np.allclose(ref_preds, model_forward.numpy()))
+
+        inputX = torch.from_numpy(X)
+        inputX.requires_grad = True
+        self.assertTrue(gradcheck(model.predict, inputX, eps=1e-6, atol=1e-3))
+        self.assertTrue(gradcheck(model, inputX, eps=1e-6, atol=1e-3))
 
 
 if __name__ == "__main__":

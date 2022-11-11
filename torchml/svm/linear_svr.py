@@ -141,7 +141,7 @@ class LinearSVR(ml.Model):
 
         prob = cp.Problem(cp.Minimize(objective), constraints)
         assert prob.is_dpp()
-        X_param.value = X.numpy()
+
         if self.fit_intercept:
             fit_lr = CvxpyLayer(prob, [X_param], [w, b])
         else:

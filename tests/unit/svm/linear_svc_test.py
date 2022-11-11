@@ -4,6 +4,7 @@ import torch
 from sklearn.datasets import make_classification
 import sklearn.svm as svm
 import time
+from torch.autograd import gradcheck
 
 from torchml.svm import LinearSVC
 
@@ -44,11 +45,17 @@ class TestLinearSVC(unittest.TestCase):
                 atol=1e-2,
             )
         )
+
+        inputX = torch.from_numpy(x)
+        inputX.requires_grad = True
+        self.assertTrue(gradcheck(lsvc.decision_function, inputX, eps=1e-6, atol=1e-3))
+
         self.assertTrue(
             np.allclose(
                 lsvc.predict(torch.from_numpy(x)), reflsvc.predict(x), atol=1e-2
             )
         )
+        self.assertTrue(gradcheck(lsvc.predict, inputX, eps=1e-6, atol=1e-3))
 
 
 if __name__ == "__main__":

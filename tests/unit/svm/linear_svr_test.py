@@ -4,6 +4,7 @@ import torch
 from sklearn.datasets import make_regression
 import sklearn.svm as svm
 import time
+from torch.autograd import gradcheck
 
 from torchml.svm import LinearSVR
 
@@ -39,6 +40,10 @@ class TestLinearSVR(unittest.TestCase):
                 lsvr.predict(torch.from_numpy(x)), reflsvr.predict(x), atol=1e-2
             )
         )
+
+        inputX = torch.from_numpy(x)
+        inputX.requires_grad = True
+        self.assertTrue(gradcheck(lsvr.predict, inputX, eps=1e-6, atol=1e-3))
 
 
 if __name__ == "__main__":
