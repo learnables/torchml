@@ -33,8 +33,7 @@ class TestLinearSVC(unittest.TestCase):
 
         end = time.time()
         # print(end - start)
-        self.assertTrue(np.allclose(
-            lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
+        self.assertTrue(np.allclose(lsvc.coef_.numpy(), reflsvc.coef_, atol=1e-2))
         self.assertTrue(
             np.allclose(lsvc.intercept_.numpy(), reflsvc.intercept_, atol=1e-2)
         )

@@ -110,8 +110,7 @@ class LinearSVR(ml.Model):
         """
 
         if self.C < 0:
-            raise ValueError(
-                "Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
         m, n = X.shape
@@ -158,7 +157,7 @@ class LinearSVR(ml.Model):
                 },
             )
         else:
-            self.coef_, = fit_lr(
+            (self.coef_,) = fit_lr(
                 X,
                 solver_args={
                     "solve_method": "ECOS",
