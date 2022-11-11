@@ -2,6 +2,7 @@ import torch
 
 import torchml as ml
 import cvxpy as cp
+from cvxpylayers.torch import CvxpyLayer
 
 
 class LinearSVR(ml.Model):
@@ -109,7 +110,8 @@ class LinearSVR(ml.Model):
         """
 
         if self.C < 0:
-            raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
+            raise ValueError(
+                "Penalty term must be positive; got (C=%r)" % self.C)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
         m, n = X.shape
@@ -120,21 +122,18 @@ class LinearSVR(ml.Model):
         if self.fit_intercept:
             b = cp.Variable()
         X_param = cp.Parameter((m, n))
-        y_param = cp.Parameter((m, 1))
-        C_param = cp.Parameter(nonneg=True)
-        epi_param = cp.Parameter()
 
         loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
 
         if self.fit_intercept:
-            hinge = cp.pos(cp.abs(y_param - (X_param @ w + b)) - epi_param)
+            hinge = cp.pos(cp.abs(y - (X_param @ w + b)) - self.epsilon)
         else:
-            hinge = cp.pos(cp.abs(y_param - (X_param @ w + b)) - epi_param)
+            hinge = cp.pos(cp.abs(y - (X_param @ w + b)) - self.epsilon)
 
         if self.loss == "epsilon_insensitive":
-            loss += C_param * cp.sum(cp.square(hinge))
+            loss += self.C * cp.sum(cp.square(hinge))
         elif self.loss == "squared_epsilon_insensitive":
-            loss += C_param * cp.sum(hinge)
+            loss += self.C * cp.sum(hinge)
 
         objective = loss
 
@@ -142,15 +141,36 @@ class LinearSVR(ml.Model):
         constraints = []
 
         prob = cp.Problem(cp.Minimize(objective), constraints)
+        assert prob.is_dpp()
         X_param.value = X.numpy()
-        y_param.value = y.numpy()
-        C_param.value = self.C
-        epi_param.value = self.epsilon
-        prob.solve(solver="ECOS", abstol=self.tol, max_iters=self.max_iter)
+        if self.fit_intercept:
+            fit_lr = CvxpyLayer(prob, [X_param], [w, b])
+        else:
+            fit_lr = CvxpyLayer(prob, [X_param], [w])
 
-        self.coef_, self.intercept_ = torch.flatten(
-            torch.from_numpy(w.value)
-        ), torch.flatten(torch.from_numpy(b.value))
+        if self.fit_intercept:
+            self.coef_, self.intercept_ = fit_lr(
+                X,
+                solver_args={
+                    "solve_method": "ECOS",
+                    "abstol": self.tol,
+                    "max_iters": self.max_iter,
+                },
+            )
+        else:
+            self.coef_, = fit_lr(
+                X,
+                solver_args={
+                    "solve_method": "ECOS",
+                    "abstol": self.tol,
+                    "max_iters": self.max_iter,
+                },
+            )
+
+        self.coef_ = torch.flatten(self.coef_)
+        if self.fit_intercept:
+            self.intercept_ = torch.flatten(self.intercept_)
+
         return self
 
     def predict(self, X: torch.Tensor) -> torch.Tensor:

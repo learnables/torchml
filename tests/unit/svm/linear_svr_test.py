@@ -23,13 +23,13 @@ class TestLinearSVR(unittest.TestCase):
         start = time.time()
         lsvr.fit(torch.from_numpy(x), torch.from_numpy(y))
         end = time.time()
-        print(end - start)
+        # print(end - start)
         start = time.time()
         reflsvr = svm.LinearSVR(max_iter=100000)
         reflsvr.fit(x, y)
 
         end = time.time()
-        print(end - start)
+        # print(end - start)
         self.assertTrue(np.allclose(lsvr.coef_.numpy(), reflsvr.coef_, atol=1e-2))
         self.assertTrue(
             np.allclose(lsvr.intercept_.numpy(), reflsvr.intercept_, atol=1e-2)

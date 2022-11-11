@@ -7,7 +7,7 @@ import time
 
 from torchml.svm import LinearSVC
 
-n_samples = 4000
+n_samples = 5000
 n_features = 5
 n_classes = 5
 n_informative = 5
