@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torchml as ml
 import sklearn.neighbors as neighbors
+from torch.autograd import gradcheck
 
 # define numbers of classes & features
 SAMPLES = 10
@@ -26,6 +27,9 @@ class Testcentroids(unittest.TestCase):
             refres = ref.predict(samp)
             centres = cent.predict(torch.from_numpy(samp)).numpy()
             self.assertTrue(np.array_equal(refres, centres))
+            inputSamp = torch.from_numpy(samp)
+            inputSamp.requires_grad = True
+            self.assertTrue(gradcheck(cent.predict, inputSamp, eps=1e-6, atol=1e-3))
 
 
 if __name__ == "__main__":

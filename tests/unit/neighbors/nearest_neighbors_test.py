@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torchml as ml
 import sklearn.neighbors as neighbors
+from torch.autograd import gradcheck
 
 BSZ = 128
 DIM = 5
@@ -24,6 +25,9 @@ class Testkneighbors(unittest.TestCase):
             # return distance is true
             self.assertTrue(np.allclose(test[0], res[0].numpy()))
             self.assertTrue(np.allclose(test[1], res[1].numpy()))
+            inputY = torch.from_numpy(y)
+            inputY.requires_grad = True
+            self.assertTrue(gradcheck(model.kneighbors, inputY, eps=1e-6, atol=1e-3))
 
             ref = neighbors.NearestNeighbors(p=i)
             ref.fit(X)
@@ -35,6 +39,7 @@ class Testkneighbors(unittest.TestCase):
 
             # return distance is false
             self.assertTrue(np.allclose(test, res.numpy()))
+            self.assertTrue(gradcheck(model.kneighbors, inputY, eps=1e-6, atol=1e-3))
 
 
 if __name__ == "__main__":

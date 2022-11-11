@@ -15,7 +15,7 @@ class TestkneighborsClassifier(unittest.TestCase):
         for i in range(1, 5, 1):
             X = np.random.randn(BSZ, DIM)
             y = np.random.randint(low=-100, high=100, size=BSZ)
-            p = np.random.randn(1, DIM)
+            p = np.random.randn(5, DIM)
 
             ref = neighbors.KNeighborsClassifier(
                 weights="distance" if i % 2 else "uniform", p=i
