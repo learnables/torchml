@@ -3,6 +3,8 @@ import numpy as np
 import torch
 import torchml as ml
 import sklearn.neighbors as neighbors
+from torch.autograd import gradcheck
+
 
 BSZ = 1000
 DIM = 50
@@ -13,7 +15,7 @@ class TestkneighborsClassifier(unittest.TestCase):
         for i in range(1, 5, 1):
             X = np.random.randn(BSZ, DIM)
             y = np.random.randint(low=-100, high=100, size=BSZ)
-            p = np.random.randn(5, DIM)
+            p = np.random.randn(1, DIM)
 
             ref = neighbors.KNeighborsClassifier(
                 weights="distance" if i % 2 else "uniform", p=i
@@ -26,13 +28,19 @@ class TestkneighborsClassifier(unittest.TestCase):
                 weights="distance" if i % 2 else "uniform", p=i
             )
             test.fit(torch.from_numpy(X), torch.from_numpy(y))
+            inputP = torch.from_numpy(p)
+            inputP.requires_grad = True
+            
             testr = test.predict(torch.from_numpy(p))
             testp = test.predict_proba(torch.from_numpy(p))
+            self.assertTrue(gradcheck(test.predict, inputP, eps=1e-6, atol=1e-3))
+            # self.assertTrue(gradcheck(test.predict_proba, inputP, eps=1e-20, atol=1e-3))
             self.assertTrue(np.allclose(refr, testr.numpy()))
             self.assertTrue(np.allclose(refp, testp.numpy()))
 
             refr2 = ref.kneighbors(p)
             testr2 = test.kneighbors(torch.from_numpy(p))
+            self.assertTrue(gradcheck(test.kneighbors, inputP, eps=1e-6, atol=1e-3))
             self.assertTrue(np.allclose(refr2[0], testr2[0].numpy()))
             self.assertTrue(np.allclose(refr2[1], testr2[1].numpy()))
 
