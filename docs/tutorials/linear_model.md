@@ -7,19 +7,19 @@ The "Ridge" is a supervised learning method on OLS adding a L2 penalty. This met
 ## Probablistic Derivation
 
 We first set up the maximum likelihood estimation equation:
-$$ \max_w p(w \vert D) $$
+$$\max_w p(w \vert D)$$
 where
-$$ D = \{(x, y)\}^N $$
+$$D = \{(x, y)\}^N$$
 
 As we select our priors based on normal distribution (L2 penalty), the likelihood function could be reduced through the following equation:
-$$ \min_w \frac{1}{2} \vert \vert  Xw - y \vert \vert^2 I + \frac{1}{2} \lambda \vert \vert w \vert \vert^2 $$
+$$\min_w \frac{1}{2} \vert \vert  Xw - y \vert \vert^2 I + \frac{1}{2} \lambda \vert \vert w \vert \vert^2$$
 
 After simplification, the objective function becomes:
-$$ \min_w (X^TXw + w^TX^Ty)^T - X^Ty + \lambda w $$
+$$\min_w (X^TXw + w^TX^Ty)^T - X^Ty + \lambda w$$
 
 While this equation is differentiable, we are able to deduct the closed form equation by taking the gradient of the objective function and set it to 0:
 
-$$ w = (X^TX + \lambda I)^{-1}X^Ty $$
+$$w = (X^TX + \lambda I)^{-1}X^Ty$$
 
 ## Implementation
 
