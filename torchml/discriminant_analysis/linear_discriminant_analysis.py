@@ -5,6 +5,34 @@ import torchml as ml
 
 
 class LinearDiscriminantAnalysis(ml.Model):
+
+    """
+    <a href="https://github.com/learnables/torchml/blob/master/torchml/discriminant_analysis/linear_discriminant_analysis.py">[Source]</a>
+
+    ## Description
+
+    Linear Discriminant Analysis is a classifier with a linear decision boundary, which is calculated by fitting class conditional densities to the data and using Bayes' rule. This model fits a Gaussian density to each class and it assumes that all classes share the same covariance matrix.
+    This current implementation only includes "svd" solver.
+
+    ## References
+
+    1. Linear discriminant analysis : a detailed tutorial [tutorial](https://usir.salford.ac.uk/id/eprint/52074/)
+    2. The scikit-learn [documentation page](https://scikit-learn.org/stable/modules/generated/sklearn.discriminant_analysis.LinearDiscriminantAnalysis.html)
+
+    ## Arguments
+
+    * `n_components` (int, default=None) - Number of components (features) for dimensionality reduction. If None, will be set to min(n_classes - 1, n_features).
+    * `priors` (torch.Tensor, default=None) - The class prior probabilities. By default, the class proportions are calculated from the input training data.
+    * `tol` (float, default=1e-4) - Absolute threshold for a singular value of X to be considered significant, used to estimate the rank of X. Used only in "svd" solver.
+    * `solver` (str, default="svd") - Solver to use. Currently only support "svd" solver.
+
+    ## Example
+
+    ~~~python
+    lda = LinearDiscriminantAnalysis()
+    ~~~
+    """
+
     def __init__(
         self,
         *,
@@ -23,6 +51,18 @@ class LinearDiscriminantAnalysis(ml.Model):
             raise NotImplementedError("other methods have not been implemented.")
 
     def _classes_means(self, X, y):
+
+        """
+        ## Description
+
+        Compute class means.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input variates.
+        * `y` (Tensor) - Target covariates.
+        """
+
         _, y = torch.unique(y, return_inverse=True)
         means = torch.zeros(self.classes_.shape[0], X.shape[1])
         for i in range(self.classes_.shape[0]):
@@ -32,6 +72,18 @@ class LinearDiscriminantAnalysis(ml.Model):
         return means
 
     def _classes_cov(self, X, y):
+
+        """
+        ## Description
+
+        Compute class covariance.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input variates.
+        * `y` (Tensor) - Target covariates.
+        """
+
         cov = torch.zeros(X.shape[1], X.shape[1])
         for idx, label in enumerate(self.classes_):
             Xg = X[y == label, :]
@@ -44,6 +96,18 @@ class LinearDiscriminantAnalysis(ml.Model):
         return cov
 
     def _solve_svd(self, X, y):
+
+        """
+        ## Description
+
+        SVD solver.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input variates.
+        * `y` (Tensor) - Target covariates.
+        """
+
         svd = torch.linalg.svd
 
         n_samples, n_features = X.shape
@@ -99,6 +163,25 @@ class LinearDiscriminantAnalysis(ml.Model):
         self.intercept_ -= self.xbar_ @ self.coef_.T
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
+
+        """
+        ## Description
+
+        Fit the Linear Discriminant Analysis model.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input variates.
+        * `y` (Tensor) - Target covariates.
+
+        ## Example
+
+        ~~~python
+        lda = LinearDiscriminantAnalysis()
+        lda.fit(X_train, y_train)
+        ~~~
+        """
+
         # data validation check
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
@@ -152,12 +235,42 @@ class LinearDiscriminantAnalysis(ml.Model):
         self._n_features_out = self._max_components
 
     def _decision_function(self, X: torch.Tensor):
+
+        """
+        ## Description
+
+        Apply decision function to input samples.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input samples.
+        """
+
         scores = torch.mm(X.double(), self.coef_.T.double()) + self.intercept_
         dec_func = scores.view(-1) if scores.shape[1] == 1 else scores
 
         return dec_func
 
     def predict(self, X: torch.Tensor):
+
+        """
+        ## Description
+
+        Predict using Linear Discriminant Analysis model.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input variates.
+
+        ## Example
+
+        ~~~python
+        lda = LinearDiscriminantAnalysis()
+        lda.fit(X_train, y_train)
+        lda.predict(X_test)
+        ~~~
+        """
+
         scores = self._decision_function(X)
         if len(scores.shape) == 1:
             indices = (scores > 0).int()
@@ -167,6 +280,25 @@ class LinearDiscriminantAnalysis(ml.Model):
         return torch.take(self.classes_, indices.long())
 
     def transform(self, X: torch.Tensor):
+
+        """
+        ## Description
+
+        Transform and project data to maximize class separation.
+
+        ## Arguments
+
+        * `X` (Tensor) - Input data.
+
+        ## Example
+
+        ~~~python
+        lda = LinearDiscriminantAnalysis()
+        lda.fit(X_train, y_train)
+        lda.transform(X_test)
+        ~~~
+        """
+
         if self.solver == "svd":
             X_new = (X - self.xbar_).float() @ self.scalings_
 
