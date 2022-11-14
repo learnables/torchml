@@ -30,13 +30,12 @@ class TestkneighborsClassifier(unittest.TestCase):
                     weights="distance" if i % 2 else "uniform", p=i
                 )
                 test.fit(torch.from_numpy(X).to(device), torch.from_numpy(y).to(device))
-                inputP = torch.from_numpy(p).to(device)
+                inputP = torch.from_numpy(p).to(device).double()
                 inputP.requires_grad = True
 
                 testr = test.predict(torch.from_numpy(p).to(device))
                 testp = test.predict_proba(torch.from_numpy(p).to(device))
                 self.assertTrue(gradcheck(test.predict, inputP, eps=1e-6, atol=1e-3))
-                # self.assertTrue(gradcheck(test.predict_proba, inputP, eps=1e-20, atol=1e-3))
                 self.assertTrue(np.allclose(refr, testr.cpu().numpy()))
                 self.assertTrue(np.allclose(refp, testp.cpu().numpy()))
 
