@@ -80,14 +80,16 @@ class Ridge(ml.Model):
         """
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
+        device = X.device
+
         if self.fit_intercept:
-            X = torch.cat([torch.ones(X.shape[0], 1), X], dim=1)
+            X = torch.cat([torch.ones(X.shape[0], 1, device=device), X], dim=1)
 
         # L2 penalty term will not apply when alpha is 0
         if self.alpha == 0:
             self.weight = torch.pinverse(X.T @ X) @ X.T @ y
         else:
-            ridge = self.alpha * torch.eye(X.shape[1])
+            ridge = self.alpha * torch.eye(X.shape[1], device=device)
             # intercept term is not penalized when fit_intercept is true
             if self.fit_intercept:
                 ridge[0][0] = 0
@@ -112,5 +114,5 @@ class Ridge(ml.Model):
         ~~~
         """
         if self.fit_intercept:
-            X = torch.cat([torch.ones(X.shape[0], 1), X], dim=1)
+            X = torch.cat([torch.ones(X.shape[0], 1, device=X.device), X], dim=1)
         return X @ self.weight
