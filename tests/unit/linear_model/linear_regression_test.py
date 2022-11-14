@@ -13,7 +13,7 @@ DIM = 5
 class TestLinearRegression(unittest.TestCase):
     def test_fit(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
             X = np.random.randn(BSZ, DIM)
             y = np.random.randn(BSZ, 1)
 

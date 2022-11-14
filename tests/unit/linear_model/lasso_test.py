@@ -13,7 +13,7 @@ DIM = 5
 class TestLasso(unittest.TestCase):
     def test_fit(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
 
             X = np.random.randn(BSZ, DIM)
             y = np.random.randn(BSZ, 1)
@@ -28,11 +28,17 @@ class TestLasso(unittest.TestCase):
             model_forward = model(torch.from_numpy(X).to(device))
 
             self.assertTrue(
-                np.allclose(ref_preds, model_preds[0].detach().cpu().numpy().flatten(), atol=1e-3)
+                np.allclose(
+                    ref_preds,
+                    model_preds[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
+                )
             )
             self.assertTrue(
                 np.allclose(
-                    ref_preds, model_forward[0].detach().cpu().numpy().flatten(), atol=1e-3
+                    ref_preds,
+                    model_forward[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
                 )
             )
 
@@ -43,7 +49,7 @@ class TestLasso(unittest.TestCase):
 
     def test_fit_intercept(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
             X = np.random.randn(BSZ, DIM)
             y = np.random.randn(BSZ, 1)
 
@@ -57,11 +63,17 @@ class TestLasso(unittest.TestCase):
             model_forward = model(torch.from_numpy(X).to(device))
 
             self.assertTrue(
-                np.allclose(ref_preds, model_preds[0].detach().cpu().numpy().flatten(), atol=1e-3)
+                np.allclose(
+                    ref_preds,
+                    model_preds[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
+                )
             )
             self.assertTrue(
                 np.allclose(
-                    ref_preds, model_forward[0].detach().cpu().numpy().flatten(), atol=1e-3
+                    ref_preds,
+                    model_forward[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
                 )
             )
 
@@ -72,7 +84,7 @@ class TestLasso(unittest.TestCase):
 
     def test_fit_positive(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
             X = np.random.randn(BSZ, DIM)
             y = np.random.randn(BSZ, 1)
 
@@ -86,11 +98,17 @@ class TestLasso(unittest.TestCase):
             model_forward = model(torch.from_numpy(X).to(device))
 
             self.assertTrue(
-                np.allclose(ref_preds, model_preds[0].detach().cpu().numpy().flatten(), atol=1e-3)
+                np.allclose(
+                    ref_preds,
+                    model_preds[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
+                )
             )
             self.assertTrue(
                 np.allclose(
-                    ref_preds, model_forward[0].detach().cpu().numpy().flatten(), atol=1e-3
+                    ref_preds,
+                    model_forward[0].detach().cpu().numpy().flatten(),
+                    atol=1e-3,
                 )
             )
 

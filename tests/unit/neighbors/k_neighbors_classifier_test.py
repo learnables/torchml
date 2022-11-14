@@ -13,7 +13,7 @@ DIM = 50
 class TestkneighborsClassifier(unittest.TestCase):
     def test_knn_classifier(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
             for i in range(1, 5, 1):
                 X = np.random.randn(BSZ, DIM)
                 y = np.random.randint(low=-100, high=100, size=BSZ)

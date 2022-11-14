@@ -125,7 +125,9 @@ class Lasso(ml.Model):
                 X, y, torch.tensor(self.alpha, dtype=torch.float64, device=device)
             )
         else:
-            self.weight = fit_lr(X, y, torch.tensor(self.alpha, dtype=torch.float64, device=device))
+            self.weight = fit_lr(
+                X, y, torch.tensor(self.alpha, dtype=torch.float64, device=device)
+            )
         self.weight = torch.stack(list(self.weight), dim=0)
 
     def predict(self, X: torch.Tensor):

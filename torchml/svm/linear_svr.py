@@ -125,9 +125,9 @@ class LinearSVR(ml.Model):
         loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
 
         if self.fit_intercept:
-            hinge = cp.pos(cp.abs(y - (X_param @ w + b)) - self.epsilon)
+            hinge = cp.pos(cp.abs(y.cpu() - (X_param @ w + b)) - self.epsilon)
         else:
-            hinge = cp.pos(cp.abs(y - (X_param @ w + b)) - self.epsilon)
+            hinge = cp.pos(cp.abs(y.cpu() - (X_param @ w + b)) - self.epsilon)
 
         if self.loss == "epsilon_insensitive":
             loss += self.C * cp.sum(cp.square(hinge))

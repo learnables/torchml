@@ -123,11 +123,12 @@ class LinearSVC(ml.Model):
         """
         if self.C < 0:
             raise ValueError("Penalty term must be positive; got (C=%r)" % self.C)
+        device = X.device
         self.classes_ = torch.unique(y)
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
         m, n = X.shape
-        self.coef_ = torch.empty((0, n))
-        self.intercept_ = torch.empty((0))
+        self.coef_ = torch.empty((0, n), device=device)
+        self.intercept_ = torch.empty((0), device=device)
         if self.classes_.shape[0] == 2:
             self._fit_with_one_class(
                 X, y, self.classes_[1], sample_weight=sample_weight
@@ -169,6 +170,7 @@ class LinearSVC(ml.Model):
     def _fit_with_one_class(
         self, X: torch.Tensor, y: torch.Tensor, fitting_class: any, sample_weight=None
     ):
+        device = X.device
         m, n = X.shape
 
         y = torch.unsqueeze(y, 1)
@@ -186,9 +188,9 @@ class LinearSVC(ml.Model):
         loss = cp.multiply((1 / 2.0), cp.norm(w, 2))
 
         if self.fit_intercept:
-            hinge = cp.pos(ones - cp.multiply(y, X_param @ w + b))
+            hinge = cp.pos(ones - cp.multiply(y.cpu(), X_param @ w + b))
         else:
-            hinge = cp.pos(ones - cp.multiply(y, X_param @ w))
+            hinge = cp.pos(ones - cp.multiply(y.cpu(), X_param @ w))
 
         if self.loss == "squared_hinge":
             loss += cp.multiply(self.C, cp.sum(cp.square(hinge)))

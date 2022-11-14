@@ -162,7 +162,9 @@ class KNeighborsClassifier(ml.Model):
         n_queries = len(X)
         weights = self._get_weights(neigh_dist, self.weights)
 
-        y_pred = torch.empty((n_queries, n_outputs), dtype=classes_[0].dtype, device=device)
+        y_pred = torch.empty(
+            (n_queries, n_outputs), dtype=classes_[0].dtype, device=device
+        )
 
         for k, classes_k in enumerate(classes_):
             if weights is None:
@@ -270,7 +272,9 @@ class KNeighborsClassifier(ml.Model):
                 "'distance', or a callable function"
             )
 
-    def _weighted_mode(self, a: torch.Tensor, w: torch.Tensor) -> tuple[Tensor | Any, Tensor | Any]:
+    def _weighted_mode(
+        self, a: torch.Tensor, w: torch.Tensor
+    ) -> tuple[Tensor | Any, Tensor | Any]:
         device = a.device
         res = torch.empty(0, device=device)
         resi = torch.empty(0, device=device)
@@ -280,7 +284,9 @@ class KNeighborsClassifier(ml.Model):
             resi = torch.cat((resi, torch.tensor([res1[1]], device=device)))
         return res, resi
 
-    def _weighted_mode_util(self, a: torch.Tensor, w: torch.Tensor) -> tuple[Any, Tensor]:
+    def _weighted_mode_util(
+        self, a: torch.Tensor, w: torch.Tensor
+    ) -> tuple[Any, Tensor]:
         device = a.device
         unique_a = torch.unique(a)
         res = torch.empty(0, device=device)

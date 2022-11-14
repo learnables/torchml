@@ -14,7 +14,7 @@ CLS = 5
 class Testcentroids(unittest.TestCase):
     def test_kneighbors(self):
         for i in range(2):
-            device = torch.device('cuda' if torch.cuda.is_available() and i else 'cpu')
+            device = torch.device("cuda" if torch.cuda.is_available() and i else "cpu")
             for i in range(100):
                 X = np.random.randn(SAMPLES, FEA)
                 y = np.random.randint(1, CLS, size=SAMPLES)
