@@ -81,6 +81,8 @@ class Lasso(ml.Model):
 
         assert X.shape[0] == y.shape[0], "Number of X and y rows don't match"
 
+        device = X.device
+
         m, n = X.shape
 
         w = cp.Variable((n, 1))
@@ -120,10 +122,10 @@ class Lasso(ml.Model):
         # this object is now callable with pytorch tensors
         if self.fit_intercept:
             self.weight, self.intercept = fit_lr(
-                X, y, torch.tensor(self.alpha, dtype=torch.float64)
+                X, y, torch.tensor(self.alpha, dtype=torch.float64, device=device)
             )
         else:
-            self.weight = fit_lr(X, y, torch.tensor(self.alpha, dtype=torch.float64))
+            self.weight = fit_lr(X, y, torch.tensor(self.alpha, dtype=torch.float64, device=device))
         self.weight = torch.stack(list(self.weight), dim=0)
 
     def predict(self, X: torch.Tensor):
