@@ -14,21 +14,13 @@ class TestPCA(unittest.TestCase):
     def test_fit(self):
         X = np.random.randn(BSZ, DIM)
 
-        ref = decomposition.PCA(
-            n_components=N_COMPONENTS,
-            svd_solver="full",
-        )
+        ref = decomposition.PCA(n_components=N_COMPONENTS, svd_solver="full")
         ref_transformed = ref.fit_transform(X)
 
-        model = ml.decomposition.PCA(n_components=N_COMPONENTS)
+        model = ml.decomposition.PCA(n_components=N_COMPONENTS, svd_solver="full")
         model_transformed = model.fit_transform(torch.from_numpy(X)).numpy()
 
-        try:
-            self.assertTrue(np.allclose(ref_transformed, model_transformed))
-        except AssertionError:
-            import ipdb
-
-            ipdb.set_trace()
+        self.assertTrue(np.allclose(ref_transformed, model_transformed))
 
 
 if __name__ == "__main__":
