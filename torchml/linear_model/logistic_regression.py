@@ -1,5 +1,8 @@
+import cvxpy as cp
 import torch
 from tqdm import tqdm
+from cvxpylayers.torch import CvxpyLayer
+import numpy as np
 
 import torchml as ml
 
@@ -28,7 +31,7 @@ class LogisticRegression(ml.Model):
 
     ## Arguments
 
-    * `max_iterint` (int) - Maximum number of iterations taken for training, default=100000
+    * `max_iter` (int) - Maximum number of iterations taken for training, default=100000
 
     ## Example
 
@@ -42,7 +45,7 @@ class LogisticRegression(ml.Model):
     def __init__(
         self,
         *,
-        max_iter: int = 100000,
+        max_iter: int = 100,
     ):
         super(LogisticRegression, self).__init__()
         self.max_iter = max_iter
@@ -62,20 +65,44 @@ class LogisticRegression(ml.Model):
         logreg.fit(X_train, y_train)
         ~~~
         """
-        self.model = LogisticRegressionModel(2, 1)  # binary classification
-        criterion = torch.nn.BCELoss()
-        optimizer = torch.optim.SGD(self.model.parameters(), lr=lr)
+        m, n = X.shape
 
-        for epoch in tqdm(range(self.max_iter), desc="Training"):
-            # Forward pass
-            outputs = self.model(X)
-            loss = criterion(torch.squeeze(outputs), y)
+        # Solve with cvxpylayers
+        lambda1_tch = torch.tensor([[0.1]], requires_grad=True)
+        lambda2_tch = torch.tensor([[0.1]], requires_grad=True)
 
-            # Backward and optimize
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        a = cp.Variable((n, 1))
+        b = cp.Variable((1, 1))
+        lambda1 = cp.Parameter((1, 1), nonneg=True)
+        lambda2 = cp.Parameter((1, 1), nonneg=True)
+        x = cp.Parameter((m, n))
+        Y = y.numpy()[:, np.newaxis]
 
+        log_likelihood = (1.0 / m) * cp.sum(
+            cp.multiply(Y, x @ a + b)
+            - cp.log_sum_exp(
+                cp.hstack([np.zeros((m, 1)), x @ a + b]).T, axis=0, keepdims=True
+            ).T
+        )
+        regularization = -lambda1 * cp.norm(a, 1) - lambda2 * cp.sum_squares(a)
+        prob = cp.Problem(cp.Maximize(log_likelihood + regularization))
+        fit_logreg = CvxpyLayer(prob, [x, lambda1, lambda2], [a, b])
+
+        loss = torch.nn.BCELoss()
+        optimizer = torch.optim.SGD([lambda1_tch, lambda2_tch], lr=lr)
+
+        with tqdm(range(self.max_iter)) as pbar:
+            for _ in pbar:
+                optimizer.zero_grad()
+                a_tch, b_tch = fit_logreg(X, lambda1_tch, lambda2_tch)
+                outputs = torch.sigmoid(X @ a_tch + b_tch)
+                l = loss(outputs.squeeze(), y)
+                l.backward()
+                optimizer.step()
+                pbar.set_description(f"loss: {l.item():.4f}")
+
+        self.slope = a_tch
+        self.intercept = b_tch
         return self
 
     def predict(self, X: torch.Tensor):
@@ -93,5 +120,8 @@ class LogisticRegression(ml.Model):
         ~~~
         """
         with torch.no_grad():
-            outputs = self.model(X)
-            return torch.squeeze(outputs).round().numpy()
+            outputs = torch.sigmoid(X @ self.slope + self.intercept)
+            outputs = torch.where(
+                outputs > 0.5, torch.ones_like(outputs), torch.zeros_like(outputs)
+            )
+        return outputs.squeeze()
