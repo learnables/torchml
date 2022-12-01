@@ -57,7 +57,25 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         model_transformed_X = model.transform(torch.from_numpy(X_copy))
 
         self.assertTrue(
-            np.allclose(ref_transformed_X, model_transformed_X.numpy())
+            np.allclose(ref_transformed_X, model_transformed_X.numpy(), atol=1e-4)
+        )
+    
+    def test_transform_two_classes(self):
+        X = np.random.randn(BSZ, DIM)
+        y = np.random.randint(low=0, high=1, size=BSZ)
+        
+        X_copy = X
+
+        ref = LinearDiscriminantAnalysis()
+        ref.fit(X, y)
+        ref_transformed_X = ref.transform(X)
+
+        model = ml.discriminant_analysis.LinearDiscriminantAnalysis()
+        model.fit(torch.from_numpy(X_copy), torch.from_numpy(y))
+        model_transformed_X = model.transform(torch.from_numpy(X_copy))
+
+        self.assertTrue(
+            np.allclose(ref_transformed_X, model_transformed_X.numpy(), atol=1e-4)
         )
 
 
