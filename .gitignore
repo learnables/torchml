@@ -135,3 +135,4 @@ log_install.txt
 .idea/
 .all_objects.cache.DS_Store
 .DS_Store
+data/MNIST

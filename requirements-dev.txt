@@ -16,4 +16,4 @@ numpy
 black
 setuptools~=58.1.0
 cvxpylayers>=0.1.5
-black
+# torchvision
