@@ -7,6 +7,7 @@ import torchvision.models as models
 from torch.utils.data import DataLoader
 
 import torchml as ml
+import sklearn.naive_bayes as naive_bayes
 
 
 def main():
@@ -64,6 +65,13 @@ def main():
     preds = model.predict(X_test_features)
     accuracy = (preds == y_test).sum().item() / len(preds)
     print("Accuracy: {}".format(accuracy))
+
+    # Compare with sklearn
+    ref = naive_bayes.GaussianNB()
+    ref.fit(X_train_features, y_train)
+    ref_preds = ref.predict(X_test_features)
+    ref_accuracy = (ref_preds == y_test.numpy()).sum().item() / len(ref_preds)
+    print("Sklearn accuracy: {}".format(ref_accuracy))
 
 
 if __name__ == "__main__":
