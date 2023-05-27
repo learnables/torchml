@@ -33,11 +33,7 @@ class RBFSampler(ml.Model):
     """
 
     def __init__(
-        self,
-        *,
-        gamma: float = 1.0,
-        n_components: int = 100,
-        random_state: int = None
+        self, *, gamma: float = 1.0, n_components: int = 100, random_state: int = None
     ):
         super(RBFSampler, self).__init__()
         self.gamma = gamma
@@ -74,8 +70,12 @@ class RBFSampler(ml.Model):
         else:
             torch.manual_seed(seed)
 
-        self.random_normal_matrix = torch.empty((n_features, self.n_components)).normal_()
-        self.random_uniform_matrix = torch.empty((self.n_components)).uniform_(0, 2 * math.pi)
+        self.random_normal_matrix = torch.empty(
+            (n_features, self.n_components), dtype=X.dtype
+        ).normal_()
+        self.random_uniform_matrix = torch.empty(
+            (self.n_components), dtype=X.dtype
+        ).uniform_(0, 2 * math.pi)
 
         self.random_weights_ = math.sqrt(self.gamma * 2) * self.random_normal_matrix
         self.random_offset_ = self.random_uniform_matrix
@@ -103,10 +103,9 @@ class RBFSampler(ml.Model):
         ~~~
         """
 
-        assert self.random_weights_ is not None, "This RBFSampler instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator."
-
-        self.random_weights_ = self.random_weights_.double()
-        self.random_offset_ = self.random_offset_.double()
+        assert (
+            self.random_weights_ is not None
+        ), "This RBFSampler instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator."
 
         projection = torch.mm(X, self.random_weights_)
         projection += self.random_offset_

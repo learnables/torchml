@@ -4,13 +4,21 @@ import scipy.sparse as sp
 import torchml as ml
 import unittest
 
-class RBFSamplerSklearn():
-    def __init__(self, *, gamma=1.0, n_components=100, random_normal_matrix=None, random_uniform_matrix=None):
+
+class RBFSamplerSklearn:
+    def __init__(
+        self,
+        *,
+        gamma=1.0,
+        n_components=100,
+        random_normal_matrix=None,
+        random_uniform_matrix=None
+    ):
         self.gamma = gamma
         self.n_components = n_components
         self.random_normal_matrix = random_normal_matrix
         self.random_uniform_matrix = random_uniform_matrix
-        
+
     def safe_sparse_dot(self, a, b, *, dense_output=False):
         if a.ndim > 2 or b.ndim > 2:
             if sp.issparse(a):
@@ -42,7 +50,7 @@ class RBFSamplerSklearn():
 
     def fit(self, X, y=None):
         n_features = X.shape[1]
-        
+
         self.random_weights_ = np.sqrt(2 * self.gamma) * self.random_normal_matrix
 
         self.random_offset_ = self.random_uniform_matrix
@@ -61,19 +69,25 @@ class RBFSamplerSklearn():
 BSZ = 128
 DIM = 5
 
-class TestRBFSampler(unittest.TestCase):
 
+class TestRBFSampler(unittest.TestCase):
     def test_fit_transform(self):
         X = np.random.randn(BSZ, DIM)
         y = np.random.randn(BSZ)
 
         rbf_feature = ml.kernel_approximations.RBFSampler(gamma=1)
         model_X_feature = rbf_feature.fit_transform(torch.from_numpy(np.asarray(X)))
-        
+
         random_normal_matrix = rbf_feature.random_normal_matrix
         random_uniform_matrix = rbf_feature.random_uniform_matrix
 
-        rbf_feature_sklearn = RBFSamplerSklearn(gamma=1, random_normal_matrix=random_normal_matrix.numpy(), random_uniform_matrix=random_uniform_matrix.numpy())
-        ref_X_feature = rbf_feature_sklearn.fit(np.asarray(X), np.asarray(y)).transform(np.asarray(X))
-        
+        rbf_feature_sklearn = RBFSamplerSklearn(
+            gamma=1,
+            random_normal_matrix=random_normal_matrix.numpy(),
+            random_uniform_matrix=random_uniform_matrix.numpy(),
+        )
+        ref_X_feature = rbf_feature_sklearn.fit(np.asarray(X), np.asarray(y)).transform(
+            np.asarray(X)
+        )
+
         self.assertTrue(np.allclose(ref_X_feature, model_X_feature.numpy()))

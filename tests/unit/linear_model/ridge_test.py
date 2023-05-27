@@ -42,5 +42,6 @@ class TestRidge(unittest.TestCase):
         self.assertTrue(np.allclose(ref_preds, model_preds.numpy()))
         self.assertTrue(np.allclose(ref_preds, model_forward.numpy()))
 
+
 if __name__ == "__main__":
     unittest.main()
