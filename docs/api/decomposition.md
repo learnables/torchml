@@ -1,10 +1,12 @@
+=======
 
 # torchml.decomposition
 
 ## Classes
 
-<!-- ### ::: torchml.decomposition.PCA -->
-    <!-- selection: -->
-      <!-- members: -->
-        <!-- - fit -->
-        <!-- - fit_transform -->
+### ::: torchml.decomposition.PCA
+    selection:
+      members:
+        - fit
+        - transform
+        - fit_transform
