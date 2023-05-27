@@ -1,1 +1,0 @@
-from .quadratic_discriminant_analysis import QuadraticDiscriminantAnalysis

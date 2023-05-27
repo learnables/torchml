@@ -145,7 +145,7 @@ class QuadraticDiscriminantAnalysis(ml.Model):
             X2 = Xm @ (R * (S ** (-0.5)))
             norm2.append(torch.sum(X2**2, dim=1))
         norm2 = torch.stack(norm2).T
-        u = torch.asarray([torch.sum(torch.log(s)) for s in self.scalings_])
+        u = torch.tensor([torch.sum(torch.log(s)) for s in self.scalings_])
         return -0.5 * (norm2 + u) + torch.log(self.priors_)
 
     def decision_function(self, X: torch.Tensor):

@@ -18,7 +18,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         ref.fit(X, y)
         ref_preds = ref.predict(X)
 
-        model = ml.quadratic_discriminant_analysis.QuadraticDiscriminantAnalysis()
+        model = ml.discriminant_analysis.QuadraticDiscriminantAnalysis()
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_preds = model.predict(torch.from_numpy(X))
 
@@ -34,7 +34,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         ref.fit(X, y)
         ref_dec_func = ref.decision_function(X)
 
-        model = ml.quadratic_discriminant_analysis.QuadraticDiscriminantAnalysis()
+        model = ml.discriminant_analysis.QuadraticDiscriminantAnalysis()
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_dec_func = model.decision_function(torch.from_numpy(X))
         
@@ -50,7 +50,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         ref.fit(X, y)
         ref_prob = ref.predict_proba(X)
 
-        model = ml.quadratic_discriminant_analysis.QuadraticDiscriminantAnalysis()
+        model = ml.discriminant_analysis.QuadraticDiscriminantAnalysis()
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_prob = model.predict_proba(torch.from_numpy(X))
         
@@ -66,7 +66,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         ref.fit(X, y)
         ref_log_prob = ref.predict_log_proba(X)
 
-        model = ml.quadratic_discriminant_analysis.QuadraticDiscriminantAnalysis()
+        model = ml.discriminant_analysis.QuadraticDiscriminantAnalysis()
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_log_prob = model.predict_log_proba(torch.from_numpy(X))
         

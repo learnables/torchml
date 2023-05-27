@@ -6,7 +6,6 @@ nav:
     - torchml.naive_bayes: api/naive_bayes.md
     - torchml.neighbors: api/neighbors.md
     - torchml.discriminant_analysis: api/discriminant_analysis.md
-    - torchml.quadratic_discriminant_analysis: api/quadratic_discriminant_analysis.md
     - torchml.kernel_approximations: api/kernel_approximations.md
   - Tutorials:
     - Linear Models: tutorials/linear_model.md
