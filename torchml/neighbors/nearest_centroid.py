@@ -64,6 +64,8 @@ class NearestCentroid(ml.Model):
         * `y` (torch.Tensor): array-like of shape (n_samples,) Target values
         """
 
+        device = X.device
+
         n_samples, n_features = X.shape
 
         # y_ind: idx, y_classes: unique tensor
@@ -79,7 +81,7 @@ class NearestCentroid(ml.Model):
 
         # Mask mapping each class to its members.
         self.centroids_ = torch.empty(
-            (n_classes, n_features), dtype=X.dtype, device=torch.device("cpu")
+            (n_classes, n_features), dtype=X.dtype, device=device
         )
         # Number of clusters in each class.
 
@@ -109,10 +111,11 @@ class NearestCentroid(ml.Model):
         * (torch.Tensor): the predicted classes
 
         """
+        device = X.device
         if X is None or X.size(dim=0) < 1:
             print("Warning: check input size")
 
-        ret = torch.empty(X.size(dim=0))
+        ret = torch.empty(X.size(dim=0), device=device)
 
         for i in range(X.size(dim=0)):
             ret[i] = self.classes_[
