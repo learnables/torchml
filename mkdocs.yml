@@ -2,12 +2,11 @@
 nav:
   - Home: index.md
   - Documentation:
-    - torchml: api/index.md
     - torchml.linear_model: api/linear_model.md
     - torchml.naive_bayes: api/naive_bayes.md
     - torchml.neighbors: api/neighbors.md
   - Tutorials:
-    - torchml.linear_model: tutorials/linear_model.md
+    - Linear Models: tutorials/linear_model.md
     - Naive Bayes: tutorials/gaussian_nb.md
   - Changelog: changelog.md
   - Getting Started: getting_started.md
