@@ -54,7 +54,11 @@ class PCA(ml.Model):
         self.svd_solver = svd_solver
 
     def fit(self, X):
-        """Fit the model with X.
+        """
+        ## Description
+
+        Fit the model with X.
+
         ## Arguments
 
         * `X` (Tensor) - Input variates.
@@ -97,7 +101,11 @@ class PCA(ml.Model):
         return self
 
     def transform(self, X):
-        """Apply dimensionality reduction to X.
+        """
+        ## Description
+
+        Apply dimensionality reduction to X.
+
         ## Arguments
 
         * `X` (Tensor) - Input variates.
@@ -112,7 +120,11 @@ class PCA(ml.Model):
         return self.U[:, : self.n_components] * self.S[: self.n_components]
 
     def fit_transform(self, X):
-        """Fit the model with X and apply the dimensionality reduction on X.
+        """
+        ## Description
+
+        Fit the model with X and apply the dimensionality reduction on X.
+
         ## Arguments
 
         * `X` (Tensor) - Input variates.
