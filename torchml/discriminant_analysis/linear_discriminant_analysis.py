@@ -126,7 +126,7 @@ class LinearDiscriminantAnalysis(ml.Model):
         std = torch.std(Xc, dim=0)
         # avoid division by zero in normalization
         std[std == 0] = 1.0
-        fac = torch.tensor(1.0 / (n_samples - n_classes))
+        fac = torch.tensor(1.0 / (n_samples - n_classes), dtype=X.dtype)
 
         # 2) Within variance scaling
         X = torch.sqrt(fac) * (Xc / std)

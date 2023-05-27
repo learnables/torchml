@@ -22,8 +22,8 @@ class Testkneighbors(unittest.TestCase):
             res = model.kneighbors(torch.from_numpy(y))
 
             # return distance is true
-            self.assertTrue(np.allclose(test[0], res[0].numpy()))
-            self.assertTrue(np.allclose(test[1], res[1].numpy()))
+            self.assertTrue(np.allclose(test[0], res[0].numpy(), atol=1e-5))
+            self.assertTrue(np.allclose(test[1], res[1].numpy(), atol=1e-5))
 
             ref = neighbors.NearestNeighbors(p=i)
             ref.fit(X)

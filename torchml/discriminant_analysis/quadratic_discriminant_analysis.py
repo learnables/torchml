@@ -58,11 +58,9 @@ class QuadraticDiscriminantAnalysis(ml.Model):
         * `y` (Tensor) - Target covariates.
         """
 
-        means = torch.zeros(self.classes_.shape[0], X.shape[1])
+        means = torch.zeros(self.classes_.shape[0], X.shape[1], dtype=X.dtype)
         for i in range(self.classes_.shape[0]):
             means[i, :] = torch.mean(X[y == i], 0)
-
-        means = torch.FloatTensor(means)
         return means
 
     def fit(self, X: torch.Tensor, y: torch.Tensor):
@@ -145,7 +143,7 @@ class QuadraticDiscriminantAnalysis(ml.Model):
             X2 = Xm @ (R * (S ** (-0.5)))
             norm2.append(torch.sum(X2**2, dim=1))
         norm2 = torch.stack(norm2).T
-        u = torch.tensor([torch.sum(torch.log(s)) for s in self.scalings_])
+        u = torch.tensor([torch.sum(torch.log(s)) for s in self.scalings_], dtype=X.dtype)
         return -0.5 * (norm2 + u) + torch.log(self.priors_)
 
     def decision_function(self, X: torch.Tensor):

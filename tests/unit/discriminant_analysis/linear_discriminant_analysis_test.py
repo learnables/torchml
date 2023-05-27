@@ -1,4 +1,5 @@
 import unittest
+import copy
 import numpy as np
 import torch
 import torchml as ml
@@ -11,7 +12,7 @@ DIM = 5
 
 class TestLinearDiscriminantAnalysis(unittest.TestCase):
     def test_fit(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=50, size=BSZ)
 
         ref = LinearDiscriminantAnalysis()
@@ -27,7 +28,7 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         )
 
     def test_fit_two_classes(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=2, size=BSZ)
 
         ref = LinearDiscriminantAnalysis()
@@ -43,10 +44,10 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         )
 
     def test_transform(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=50, size=BSZ)
         
-        X_copy = X
+        X_copy = copy.deepcopy(X)
 
         ref = LinearDiscriminantAnalysis()
         ref.fit(X, y)
@@ -61,10 +62,10 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         )
     
     def test_transform_two_classes(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=1, size=BSZ)
         
-        X_copy = X
+        X_copy = copy.deepcopy(X)
 
         ref = LinearDiscriminantAnalysis()
         ref.fit(X, y)
