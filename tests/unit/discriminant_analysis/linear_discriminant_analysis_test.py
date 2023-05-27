@@ -23,9 +23,7 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_preds = model.predict(torch.from_numpy(X))
 
-        self.assertTrue(
-            np.allclose(ref_preds, model_preds.numpy())
-        )
+        self.assertTrue(np.allclose(ref_preds, model_preds.numpy()))
 
     def test_fit_two_classes(self):
         X = np.random.randn(BSZ, DIM).astype(np.float32)
@@ -39,14 +37,12 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         model.fit(torch.from_numpy(X), torch.from_numpy(y))
         model_preds = model.predict(torch.from_numpy(X))
 
-        self.assertTrue(
-            np.allclose(ref_preds, model_preds.numpy())
-        )
+        self.assertTrue(np.allclose(ref_preds, model_preds.numpy()))
 
     def test_transform(self):
         X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=50, size=BSZ)
-        
+
         X_copy = copy.deepcopy(X)
 
         ref = LinearDiscriminantAnalysis()
@@ -60,11 +56,11 @@ class TestLinearDiscriminantAnalysis(unittest.TestCase):
         self.assertTrue(
             np.allclose(ref_transformed_X, model_transformed_X.numpy(), atol=1e-4)
         )
-    
+
     def test_transform_two_classes(self):
         X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=1, size=BSZ)
-        
+
         X_copy = copy.deepcopy(X)
 
         ref = LinearDiscriminantAnalysis()

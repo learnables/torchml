@@ -272,9 +272,7 @@ class KNeighborsClassifier(ml.Model):
                 "'distance', or a callable function"
             )
 
-    def _weighted_mode(
-        self, a: torch.Tensor, w: torch.Tensor
-    ) -> Tuple[Any,  Any]:
+    def _weighted_mode(self, a: torch.Tensor, w: torch.Tensor) -> Tuple[Any, Any]:
         device = a.device
         res = torch.empty(0, device=device)
         resi = torch.empty(0, device=device)

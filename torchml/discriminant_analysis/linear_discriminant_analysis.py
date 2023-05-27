@@ -90,7 +90,9 @@ class LinearDiscriminantAnalysis(ml.Model):
             if Xg.shape[0] == 1:
                 class_cov = torch.zeros(X.shape[1], X.shape[1])
             else:
-                class_cov = self.priors_[idx] * torch.atleast_2d(torch.cov(Xg.T, correction=0))
+                class_cov = self.priors_[idx] * torch.atleast_2d(
+                    torch.cov(Xg.T, correction=0)
+                )
             cov += class_cov
         cov = cov.to(torch.float64)
         return cov
@@ -135,13 +137,14 @@ class LinearDiscriminantAnalysis(ml.Model):
 
         rank = torch.sum((S > self.tol).int())
         # Scaling of within covariance is: V' 1/S
-        scalings = ((Vt[:rank, :] / std).T / S[:rank])
+        scalings = (Vt[:rank, :] / std).T / S[:rank]
         fac = 1.0 if n_classes == 1 else 1.0 / (n_classes - 1)
 
         # 3) Between variance scaling
         # Scale weighted centers
         X = (
-            (torch.sqrt((n_samples * self.priors_) * fac)) * (self.means_ - self.xbar_).T
+            (torch.sqrt((n_samples * self.priors_) * fac))
+            * (self.means_ - self.xbar_).T
         ).T @ scalings.float()
         # Centers are living in a space with n_classes-1 dim (maximum)
         # Use SVD to find projection in the space spanned by the
@@ -151,14 +154,14 @@ class LinearDiscriminantAnalysis(ml.Model):
         if self._max_components == 0:
             self.explained_variance_ratio_ = torch.empty((0,), dtype=S.dtype)
         else:
-            self.explained_variance_ratio_ = (S**2 / torch.sum(S**2))[
+            self.explained_variance_ratio_ = (S ** 2 / torch.sum(S ** 2))[
                 : self._max_components
             ]
 
         rank = torch.sum((S > self.tol * S[0]).int())
         self.scalings_ = scalings.float() @ Vt.T[:, :rank]
         coef = (self.means_ - self.xbar_) @ self.scalings_
-        self.intercept_ = -0.5 * torch.sum(coef**2, dim=1) + torch.log(self.priors_)
+        self.intercept_ = -0.5 * torch.sum(coef ** 2, dim=1) + torch.log(self.priors_)
         self.coef_ = coef @ self.scalings_.T
         self.intercept_ -= self.xbar_ @ self.coef_.T
 
