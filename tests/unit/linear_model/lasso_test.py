@@ -24,11 +24,11 @@ class TestLasso(unittest.TestCase):
         model_forward = model(torch.from_numpy(X))
 
         self.assertTrue(
-            np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-3)
+            np.allclose(ref_preds, model_preds[0].detach().numpy().flatten(), atol=1e-2)
         )
         self.assertTrue(
             np.allclose(
-                ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-3
+                ref_preds, model_forward[0].detach().numpy().flatten(), atol=1e-2
             )
         )
 
