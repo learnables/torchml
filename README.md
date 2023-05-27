@@ -1,49 +1,53 @@
-# torchml
+<p align="center"><img src="/assets/images/torchml-logo.png" height="120px" /></p>
 
 --------------------------------------------------------------------------------
 
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
 
-## TODOs
+`torchml` implements the scikit-learn API on top of PyTorch.
+This we automatically get GPU support for scikit-learn and, when possible, differentiability.
 
-* Replace `myproject` with `torchml` everywhere such that:
-    * All tests pass.
-    * The docs render nicely.
-* Implement algorithms from scikit-learn with PyTorch.
-    * including tests for feature parity (ie, same API, same predictions) and gradient correctness (ie, finite differences).
-    * including docs.
-    * preliminary example: [Linear Regression](torchml/linear_model/linear_regression.py) with some [tests](tests/unit/linear_model/linear_regression_tests.py).
-* A logo?
+## Resources
 
-## Getting started
+- GitHub: [github.com/learnables/torchml](http://github.com/learnables/torchml)
+- Documentation: [learnables.net/torchml](http://learnables.net/torchml/)
+- Tutorials: [learnables.net/torchml/tutorials](http://learnables.net/torchml/tutorials/linear_model/)
+- Examples: [learnables.net/torchml/examples](https://github.com/learnables/torchml/tree/master/examples)
 
-Create a virtual environment:
+## Getting Started
 
-```
-conda create -n torchml python=3.9
-conda activate torchml
-```
+`pip install torchml`
 
-Install the library locally in development mode:
+### Minimal Linear Regression Example
 
-```
-make dev
-```
+~~~python
+import torchml as ml
 
-## Tests
+(X_train, y_train), (X_test, y_test) = generate_data()
 
-Add your own unit tests in: `tests/unit/module/submodule_test.py` and run:
+# API closely follows scikit-learn
+linreg = ml.linear_mode.LinearRegression()
+linreg.fit(X_train, y_train)
+linreg.predict(X_test)
+~~~
 
-```
-make tests
-```
+## Changelog
 
-## Docs
+A human-readable changelog is available in the [CHANGELOG.md](./CHANGELOG.md) file.
 
-Add your own to: `mkdocs.yaml` and in `docs/api/module.md`, run:
+## Citing
 
-```
-make docs
-```
+To cite `torchml` repository in your academic publications, please use the following reference.
 
-and open [http://localhost:8000](http://localhost:8000).
+>  Sébastien M. R. Arnold, Lucy Xiaoyang Shi, Xinran Gao, Zhiheng Zhang, and Bairen Chen. 2023. "torchml: a scikit-learn implementation on top of PyTorch".
+
+You can also use the following Bibtex entry:
+
+~~~bib
+@misc{torchml,
+  author={Arnold, S{\'e}bastien M R and Shi, Lucy Xiaoyang and Gao, Xinran and Zhang, Zhiheng and Chen, Bairen},
+  title={torchml: A scikit-learn implementation on top of PyTorch},
+  year={2023},
+  url={https://github.com/learnables/torchml},
+}
+~~~
