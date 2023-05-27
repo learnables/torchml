@@ -233,7 +233,7 @@ class KNeighborsClassifier(ml.Model):
         X: torch.Tensor = None,
         n_neighbors: int = None,
         return_distance: bool = True,
-    ) -> any:
+    ) -> Any:
         """
         ## Description
 
@@ -274,7 +274,7 @@ class KNeighborsClassifier(ml.Model):
 
     def _weighted_mode(
         self, a: torch.Tensor, w: torch.Tensor
-    ) -> tuple[Tensor | Any, Tensor | Any]:
+    ) -> Tuple[Any,  Any]:
         device = a.device
         res = torch.empty(0, device=device)
         resi = torch.empty(0, device=device)
@@ -286,7 +286,7 @@ class KNeighborsClassifier(ml.Model):
 
     def _weighted_mode_util(
         self, a: torch.Tensor, w: torch.Tensor
-    ) -> tuple[Any, Tensor]:
+    ) -> Tuple[Any, Tensor]:
         device = a.device
         unique_a = torch.unique(a)
         res = torch.empty(0, device=device)

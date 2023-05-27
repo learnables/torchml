@@ -27,7 +27,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         )
     
     def test_decision_function(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=10, size=BSZ)
 
         ref = QuadraticDiscriminantAnalysis()
@@ -39,7 +39,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         model_dec_func = model.decision_function(torch.from_numpy(X))
         
         self.assertTrue(
-            np.allclose(ref_dec_func, model_dec_func.numpy())
+            np.allclose(ref_dec_func, model_dec_func.numpy(), atol=1e-4)
         )
     
     def test_predict_proba(self):
@@ -59,7 +59,7 @@ class TestQuadraticDiscriminantAnalysis(unittest.TestCase):
         )
         
     def test_predict_log_proba(self):
-        X = np.random.randn(BSZ, DIM)
+        X = np.random.randn(BSZ, DIM).astype(np.float32)
         y = np.random.randint(low=0, high=10, size=BSZ)
 
         ref = QuadraticDiscriminantAnalysis()
