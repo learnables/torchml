@@ -126,7 +126,7 @@ class LinearDiscriminantAnalysis(ml.Model):
         std = torch.std(Xc, dim=0)
         # avoid division by zero in normalization
         std[std == 0] = 1.0
-        fac = torch.asarray(1.0 / (n_samples - n_classes))
+        fac = torch.tensor(1.0 / (n_samples - n_classes))
 
         # 2) Within variance scaling
         X = torch.sqrt(fac) * (Xc / std)
@@ -226,9 +226,9 @@ class LinearDiscriminantAnalysis(ml.Model):
 
         # treat binary case as a special case
         if self.classes_.shape[0] == 2:
-            coef_ = torch.asarray(self.coef_[1, :] - self.coef_[0, :], dtype=X.dtype)
+            coef_ = torch.tensor(self.coef_[1, :] - self.coef_[0, :], dtype=X.dtype)
             self.coef_ = torch.reshape(coef_, (1, -1))
-            intercept_ = torch.asarray(
+            intercept_ = torch.tensor(
                 self.intercept_[1] - self.intercept_[0], dtype=X.dtype
             )
             self.intercept_ = torch.reshape(intercept_, (1, 1))
