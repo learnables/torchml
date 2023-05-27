@@ -51,9 +51,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Compute class means.
 
         ## Arguments
+
         * `X` (Tensor) - Input variates.
         * `y` (Tensor) - Target covariates.
         """
@@ -67,9 +69,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Fit the Quadratic Discriminant Analysis model.
 
         ## Arguments
+
         * `X` (Tensor) - Input variates.
         * `y` (Tensor) - Target covariates.
 
@@ -115,7 +119,6 @@ class QuadraticDiscriminantAnalysis(ml.Model):
                     % str(self.classes_[ind])
                 )
             Xgc = Xg - meang
-            # Xgc = U * S * V.T
             _, S, Vt = torch.linalg.svd(Xgc, full_matrices=False)
             rank = torch.sum(S > self.tol)
             if rank < n_features:
@@ -123,7 +126,6 @@ class QuadraticDiscriminantAnalysis(ml.Model):
             S2 = (S**2) / ((Xg.shape[0]) - 1)
             S2 = ((1 - self.reg_param) * S2) + self.reg_param
             if self.store_covariance or store_covariance:
-                # cov = V * (S^2 / (n-1)) * V.T
                 cov.append((S2 * Vt.T) @ Vt)
             scalings.append(S2)
             rotations.append(Vt.T)
@@ -150,9 +152,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Apply decision function to an array of samples.
 
         ## Arguments
+
         * `X` (Tensor) - Input data.
 
         ## Example
@@ -174,9 +178,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Predict using Quadratic Discriminant Analysis model.
 
         ## Arguments
+
         * `X` (Tensor) - Input variates.
 
         ## Example
@@ -196,9 +202,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Calculate and return posterior probabilities of classification.
 
         ## Arguments
+
         * `X` (Tensor) - Input data.
 
         ## Example
@@ -221,9 +229,11 @@ class QuadraticDiscriminantAnalysis(ml.Model):
 
         """
         ## Description
+
         Calculate and return log of posterior probabilities of classification.
 
         ## Arguments
+
         * `X` (Tensor) - Input data.
 
         ## Example
