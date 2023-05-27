@@ -4,7 +4,9 @@
 `torchml.neighbors` currently supports Unsupervised learnings on classification problem. It currently supports K Nearest Neighbors classification with `torchml.neighbors.NearestNeighbors` that implement `sklearn.neighbors.NearestNeighbors`'s brute force solution with TorchML.
 
 ## Probabilistic Derivation
+
 ### K Nearest Neighbors classification
+
 The principle behind Nearest Neighbors algorithms is, given a distance function and a new test point $x$, the algorithm find k closest samples in the known sample set, and use them to estimate the $x$. The number $k$ can be user-defined and tuned according to the particular problem. The distance function can be any arbitrary metric function, and standard Euclidean distance is the most common choice.
 
 One important thing about this algorithm is that its not based on any probabilistic framework, but the algorithm is able to estimate probability for each class given a test point $x$ and its k neighbors.
@@ -27,6 +29,7 @@ $P(c_c | x)= {nk_c\over k}$
 This estimation is often accurate in practice, even though the algorithm is not built with probability in mind. 
 
 ### KNN from a bayesian stand point
+
 Even though the KNN algorithm is not built on top of probabilistic framework, we can gain intuition behind its shockingly good estimation by framing it in the bayesian framework.
 
 What we want is:
@@ -66,12 +69,14 @@ substitute both $P(x|c_c) = {{nk_c}\over{n_c V}}$ and $P(x) = {{k}\over{nV}}$ in
 $P(c_c | x)= {nk_c\over k}$
 
 ## Algorithmic Implementation
+
 Given a new sample, the brute-force algorithm is to:
 1. Calculate all pairwise distances between the sample point and the labeled examples
 2. Find the `k` neighboring samples with the least `k` smallest distances
 3. For each class, obtain the ratio of number of points in that class in the `k` neighbors and the number `k`, and that ratio will be the probability that the new sample belongs to this class.
 
 ## The torchml Interface
+
 ~~~python
 import numpy as np
 import torchml as ml
@@ -85,6 +90,7 @@ neigh.predict_proba(torch.from_numpy(point)) # returns all the class probabiliti
 ~~~
 
 ## References
+
 * [Christopher M. Bishop. 2006. Pattern Recognition and Machine Learning (Information Science and Statistics). Springer-Verlag, Berlin, Heidelberg.](https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf)
 * [MIT Lecture on KNN](https://youtu.be/09mb78oiPkA)
 
