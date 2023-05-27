@@ -5,7 +5,7 @@
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
 
 `torchml` implements the scikit-learn API on top of PyTorch.
-This we automatically get GPU support for scikit-learn and, when possible, differentiability.
+This means we automatically get GPU support for scikit-learn and, when possible, differentiability.
 
 ## Resources
 
@@ -26,7 +26,7 @@ import torchml as ml
 (X_train, y_train), (X_test, y_test) = generate_data()
 
 # API closely follows scikit-learn
-linreg = ml.linear_mode.LinearRegression()
+linreg = ml.linear_model.LinearRegression()
 linreg.fit(X_train, y_train)
 linreg.predict(X_test)
 ~~~
