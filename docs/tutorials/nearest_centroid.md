@@ -20,9 +20,9 @@ In short, For each class in the data set that we train, we keep a representation
 
 $$ \\ \vec\mu_\ell = \frac {1}{|C_\ell|}\underset{i\in C_\ell}{\sum} \vec {x}_i$$
 
-- 'μ' : per-class centroids
-- '$\vec{x}$' : training vector
-- '$C_\ell$' :  the set of indices of samples belonging to class $\ell\in\mathbf{Y}$
+- '\(\mu\)' : per-class centroids
+- '\(\vec{x}\)' : training vector
+- '\(C_\ell\)' :  the set of indices of samples belonging to class \(\ell\in\mathbf{Y}\)
 
 
 
@@ -30,10 +30,10 @@ Then when asked to predict with new data points, we compare each of the point wi
 
 $$ \\ \hat{y} = \argmin _{\ell\in \mathbf{Y}}||\vec{\mu_\ell} - \vec{x}|| $$
 
-- '$\mu_\ell$' : per-class centroids 
-- '$\vec{x}$' : observation
-- '$\mathbf{Y}$' :  all classes in traning set
-- '$\hat{y}$' : prediction classes
+- '\(\mu_\ell\)' : per-class centroids 
+- '\(\vec{x}\)' : observation
+- '\(\mathbf{Y}\)' :  all classes in traning set
+- '\(\hat{y}\)' : prediction classes
 
 *Note:*
 Often, we use mean/median of the training vectors to calculate centroids as they describe the class well, and Euclidean Distance to measure the distance between the centroids and the unseen data points for prediction.
