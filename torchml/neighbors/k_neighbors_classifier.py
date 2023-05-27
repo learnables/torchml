@@ -1,7 +1,10 @@
 import numbers
 import warnings
+from typing import Tuple, Any
 
 import torch
+from torch import Tensor
+
 import torchml as ml
 
 
@@ -107,6 +110,7 @@ class KNeighborsClassifier(ml.Model):
         """
         self.KNN.fit(X)
         self.weights = self._check_weights(weights=self.weights)
+        device = X.device
         if y.ndim == 1 or y.ndim == 2 and y.shape[1] == 1:
             if y.ndim != 1:
                 warnings.warn(
@@ -122,7 +126,7 @@ class KNeighborsClassifier(ml.Model):
             self.outputs_2d_ = True
 
         self.classes_ = []
-        self._y = torch.empty(size=y.shape, dtype=torch.long)
+        self._y = torch.empty(size=y.shape, dtype=torch.long, device=device)
         for k in range(self._y.shape[1]):
             classes, self._y[:, k] = torch.unique(y[:, k], return_inverse=True)
             self.classes_.append(classes)
@@ -141,6 +145,7 @@ class KNeighborsClassifier(ml.Model):
 
         * `X` (torch.Tensor): the target point
         """
+        device = X.device
         if self.weights == "uniform":
             neigh_ind = self.KNN.kneighbors(X, return_distance=False)
             neigh_dist = None
@@ -157,7 +162,9 @@ class KNeighborsClassifier(ml.Model):
         n_queries = len(X)
         weights = self._get_weights(neigh_dist, self.weights)
 
-        y_pred = torch.empty((n_queries, n_outputs), dtype=classes_[0].dtype)
+        y_pred = torch.empty(
+            (n_queries, n_outputs), dtype=classes_[0].dtype, device=device
+        )
 
         for k, classes_k in enumerate(classes_):
             if weights is None:
@@ -182,6 +189,7 @@ class KNeighborsClassifier(ml.Model):
 
         * `X` (torch.Tensor): the target point
         """
+        device = X.device
         if self.weights == "uniform":
             neigh_ind = self.KNN.kneighbors(X, return_distance=False)
             neigh_dist = None
@@ -198,13 +206,13 @@ class KNeighborsClassifier(ml.Model):
 
         weights = self._get_weights(neigh_dist, self.weights)
         if weights is None:
-            weights = torch.ones_like(neigh_ind)
+            weights = torch.ones_like(neigh_ind, device=device)
 
         all_rows = torch.arange(n_queries)
         probabilities = []
         for k, classes_k in enumerate(classes_):
             pred_labels = _y[:, k][neigh_ind]
-            proba_k = torch.zeros((n_queries, len(classes_k)))
+            proba_k = torch.zeros((n_queries, len(classes_k)), device=device)
 
             for i, idx in enumerate(pred_labels.T):
                 proba_k[all_rows, idx] += weights[:, i]
@@ -225,7 +233,7 @@ class KNeighborsClassifier(ml.Model):
         X: torch.Tensor = None,
         n_neighbors: int = None,
         return_distance: bool = True,
-    ) -> any:
+    ) -> Any:
         """
         ## Description
 
@@ -264,21 +272,27 @@ class KNeighborsClassifier(ml.Model):
                 "'distance', or a callable function"
             )
 
-    def _weighted_mode(self, a: torch.Tensor, w: torch.Tensor) -> torch.Tensor:
-        res = torch.empty(0)
-        resi = torch.empty(0)
+    def _weighted_mode(
+        self, a: torch.Tensor, w: torch.Tensor
+    ) -> Tuple[Any,  Any]:
+        device = a.device
+        res = torch.empty(0, device=device)
+        resi = torch.empty(0, device=device)
         for i, x in enumerate(a):
             res1 = self._weighted_mode_util(x, w)
-            res = torch.cat((res, torch.tensor([res1[0]])))
-            resi = torch.cat((resi, torch.tensor([res1[1]])))
+            res = torch.cat((res, torch.tensor([res1[0]], device=device)))
+            resi = torch.cat((resi, torch.tensor([res1[1]], device=device)))
         return res, resi
 
-    def _weighted_mode_util(self, a: torch.Tensor, w: torch.Tensor) -> torch.Tensor:
+    def _weighted_mode_util(
+        self, a: torch.Tensor, w: torch.Tensor
+    ) -> Tuple[Any, Tensor]:
+        device = a.device
         unique_a = torch.unique(a)
-        res = torch.empty(0)
+        res = torch.empty(0, device=device)
         for i, x in enumerate(unique_a):
             cleared = (a == x).float()
             cleared_weights = cleared * w
             sum = torch.sum(cleared_weights)
-            res = torch.cat((res, torch.tensor([sum])))
+            res = torch.cat((res, torch.tensor([sum], device=device)))
         return unique_a[torch.argmax(res)], torch.max(res)
