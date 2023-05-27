@@ -10,6 +10,8 @@ nav:
   - Tutorials:
     - Linear Models: tutorials/linear_model.md
     - Naive Bayes: tutorials/gaussian_nb.md
+    - Nearest Neighbors: tutorials/neighbors.md
+    - Nearest Centroid: tutorials/nearest_centroid.md
   - Changelog: changelog.md
   - Getting Started: getting_started.md
   - GitHub: https://github.com/learnables/torchml/

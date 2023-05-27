@@ -1,4 +1,4 @@
-# Nearest Centroids with torchml
+# Nearest Centroids
 
 Written by [Bairen Chen](https://bairenc.github.io) on 10/18/2022.
 
