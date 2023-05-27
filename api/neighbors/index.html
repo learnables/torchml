@@ -1,0 +1,1299 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+        <link rel="canonical" href="http://torchml.net/api/neighbors/">
+      
+      
+        <meta name="author" content="Séb Arnold">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.2.4, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>torchml.neighbors - torchml</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700%7CUbuntu+Mono&display=fallback">
+        <style>body,input{font-family:"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Ubuntu Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+    
+      <link rel="stylesheet" href="../../assets/css/custom.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-68693545-3", "learnables.github.com")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="white" data-md-color-accent="orange">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#torchmlneighbors" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="http://torchml.net/" title="torchml" aria-label="torchml" class="md-header-nav__button md-logo">
+          
+            <img alt="logo" src="../../assets/images/torchml-icon.png" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              torchml
+            </span>
+            <span class="md-header-nav__topic">
+              
+                torchml.neighbors
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/learnables/torchml" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    learnables/torchml
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="http://torchml.net/" title="torchml" class="md-nav__button md-logo">
+      
+        <img alt="logo" src="../../assets/images/torchml-icon.png" width="48" height="48">
+      
+    </a>
+    torchml
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/learnables/torchml" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    learnables/torchml
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    
+    <label class="md-nav__link" for="nav-2">
+      Documentation
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Documentation
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../linear_model/" title="torchml.linear_model" class="md-nav__link">
+      torchml.linear_model
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../naive_bayes/" title="torchml.naive_bayes" class="md-nav__link">
+      torchml.naive_bayes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        torchml.neighbors
+      </label>
+    
+    <a href="./" title="torchml.neighbors" class="md-nav__link md-nav__link--active">
+      torchml.neighbors
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors" class="md-nav__link">
+    NearestNeighbors
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors.kneighbors" class="md-nav__link">
+    kneighbors()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid" class="md-nav__link">
+    NearestCentroid
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid.predict" class="md-nav__link">
+    predict()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier" class="md-nav__link">
+    KNeighborsClassifier
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.kneighbors" class="md-nav__link">
+    kneighbors()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.predict" class="md-nav__link">
+    predict()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.predict_proba" class="md-nav__link">
+    predict_proba()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../discriminant_analysis/" title="torchml.discriminant_analysis" class="md-nav__link">
+      torchml.discriminant_analysis
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../kernel_approximations/" title="torchml.kernel_approximations" class="md-nav__link">
+      torchml.kernel_approximations
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorials
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/linear_model/" title="Linear Models" class="md-nav__link">
+      Linear Models
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/gaussian_nb/" title="Naive Bayes" class="md-nav__link">
+      Naive Bayes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/neighbors/" title="Nearest Neighbors" class="md-nav__link">
+      Nearest Neighbors
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/nearest_centroid/" title="Nearest Centroid" class="md-nav__link">
+      Nearest Centroid
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../changelog/" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../getting_started.md" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="https://github.com/learnables/torchml/" title="GitHub" class="md-nav__link">
+      GitHub
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#classes" class="md-nav__link">
+    Classes
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors" class="md-nav__link">
+    NearestNeighbors
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestNeighbors.kneighbors" class="md-nav__link">
+    kneighbors()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid" class="md-nav__link">
+    NearestCentroid
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.NearestCentroid.predict" class="md-nav__link">
+    predict()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier" class="md-nav__link">
+    KNeighborsClassifier
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.fit" class="md-nav__link">
+    fit()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.kneighbors" class="md-nav__link">
+    kneighbors()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.predict" class="md-nav__link">
+    predict()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchml.neighbors.KNeighborsClassifier.predict_proba" class="md-nav__link">
+    predict_proba()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="torchmlneighbors">torchml.neighbors<a class="headerlink" href="#torchmlneighbors" title="Permanent link">&para;</a></h1>
+<h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h3 id="torchml.neighbors.NearestNeighbors" class="doc doc-heading">
+        <code>
+torchml.neighbors.NearestNeighbors        </code>
+
+
+
+<a href="#torchml.neighbors.NearestNeighbors" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents first">
+
+      <h5 id="torchml.neighbors.NearestNeighbors--description">Description<a class="headerlink" href="#torchml.neighbors.NearestNeighbors--description" title="Permanent link">&para;</a></h5>
+<p>Unsupervised learner for implementing neighbor searches.</p>
+<p>Implementation of scikit-learn's nearest neighbors APIs using PyTorch.</p>
+<h5 id="torchml.neighbors.NearestNeighbors--references">References<a class="headerlink" href="#torchml.neighbors.NearestNeighbors--references" title="Permanent link">&para;</a></h5>
+<ol>
+<li>Fix, E. and Hodges, J.L. (1951) Discriminatory Analysis, Nonparametric Discrimination: Consistency Properties. Technical Report 4, USAF School of Aviation Medicine, Randolph Field.</li>
+<li>MIT 6.034 Artificial Intelligence, Fall 2010, <a href="https://www.youtube.com/watch?v=09mb78oiPkA">10. Introduction to Learning, Nearest Neighbors</a></li>
+<li>The scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestNeighbors.html#sklearn.neighbors.NearestNeighbors">documentation page</a> for nearest neighbors.</li>
+<li><a href="https://gist.github.com/JosueCom/7e89afc7f30761022d7747a501260fe3">Referenced Implementation</a></li>
+</ol>
+<h5 id="torchml.neighbors.NearestNeighbors--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestNeighbors--arguments" title="Permanent link">&para;</a></h5>
+<ul>
+<li>
+<p><code>n_neighbors</code> (int, default=5):
+    Number of neighbors to use by default for kneighbors queries.</p>
+</li>
+<li>
+<p><code>radius</code> (float, default=1.0):
+    Range of parameter space to use by default for radius_neighbors queries.</p>
+</li>
+<li>
+<p><code>algorithm</code> (string, default=’auto’):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+<li>
+<p><code>leaf_size</code> (int, default=30):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+<li>
+<p><code>metric</code> (str or callable, default=’minkowski’):
+    No metric supprt right now, dummy variable and always minkowski</p>
+</li>
+<li>
+<p><code>p</code> (int, default=2):
+    No metric supprt right now, dummy variable and always 2</p>
+</li>
+<li>
+<p><code>metric_paramsdict</code> (default=None):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+<li>
+<p><code>n_jobs</code> (int, default=None):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+</ul>
+<h5 id="torchml.neighbors.NearestNeighbors--example">Example<a class="headerlink" href="#torchml.neighbors.NearestNeighbors--example" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torchml</span> <span class="k">as</span> <span class="nn">ml</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">]])</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<span class="n">neigh</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+<span class="n">neigh</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+</code></pre></div>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.NearestNeighbors.fit" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#torchml.neighbors.NearestNeighbors.fit" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.NearestNeighbors.fit--description">Description<a class="headerlink" href="#torchml.neighbors.NearestNeighbors.fit--description" title="Permanent link">&para;</a></h6>
+<p>Initialize the class with training sets</p>
+<h6 id="torchml.neighbors.NearestNeighbors.fit--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestNeighbors.fit--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the training set</li>
+<li><code>y</code> (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.NearestNeighbors.kneighbors" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">kneighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">n_neighbors</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_distance</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="nb">any</span><span class="o">&gt;</span></code>
+
+
+<a href="#torchml.neighbors.NearestNeighbors.kneighbors" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.NearestNeighbors.kneighbors--description">Description<a class="headerlink" href="#torchml.neighbors.NearestNeighbors.kneighbors--description" title="Permanent link">&para;</a></h6>
+<p>Computes the knearest neighbors and returns those k neighbors</p>
+<h6 id="torchml.neighbors.NearestNeighbors.kneighbors--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestNeighbors.kneighbors--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the target point</li>
+<li><code>n_neighbors</code> (int, default=None): optional argument to respecify the parameter k in k nearest neighbors</li>
+<li><code>return_distance</code> (bool, default=True): returns the distances to the neighbors if true</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h3 id="torchml.neighbors.NearestCentroid" class="doc doc-heading">
+        <code>
+torchml.neighbors.NearestCentroid        </code>
+
+
+
+<a href="#torchml.neighbors.NearestCentroid" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents first">
+
+      <h5 id="torchml.neighbors.NearestCentroid--description">Description<a class="headerlink" href="#torchml.neighbors.NearestCentroid--description" title="Permanent link">&para;</a></h5>
+<p>Implementation of scikit-learn's Nearest centroid APIs using pytorch.
+Euclidean metric by default.</p>
+<h5 id="torchml.neighbors.NearestCentroid--references">References<a class="headerlink" href="#torchml.neighbors.NearestCentroid--references" title="Permanent link">&para;</a></h5>
+<ol>
+<li>The scikit-learn [documentation page] (https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.NearestCentroid.html) for nearest centroids.</li>
+<li>M. Thulasidas, "Nearest Centroid: A Bridge between Statistics and Machine Learning," 2020 IEEE International Conference on Teaching, Assessment, and Learning for Engineering (TALE), 2020, pp. 9-16, doi: 10.1109/TALE48869.2020.9368396.</li>
+</ol>
+<h5 id="torchml.neighbors.NearestCentroid--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestCentroid--arguments" title="Permanent link">&para;</a></h5>
+<ul>
+<li>
+<p><code>metric</code> (str or callable, default="euclidean"):
+    Metric to use for distance computation. Only Euclidiean metric is supported for now.</p>
+</li>
+<li>
+<p><code>shrink_threshold</code> (float, default=None):
+    Threshold for shrinking centroids to remove features. Not supported for now.</p>
+</li>
+</ul>
+<h5 id="torchml.neighbors.NearestCentroid--example">Example<a class="headerlink" href="#torchml.neighbors.NearestCentroid--example" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torchml</span> <span class="k">as</span> <span class="nn">ml</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">7</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">]])</span>
+<span class="n">torchX</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">torchy</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">centroid</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">NearestCentroid</span><span class="p">()</span>
+<span class="n">centroid</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">torchX</span><span class="p">,</span><span class="n">torchy</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">centroid</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">samp</span><span class="p">))</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</code></pre></div>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.NearestCentroid.fit" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span></code>
+
+
+<a href="#torchml.neighbors.NearestCentroid.fit" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.NearestCentroid.fit--description">Description<a class="headerlink" href="#torchml.neighbors.NearestCentroid.fit--description" title="Permanent link">&para;</a></h6>
+<p>Fit the NearestCentroid model according to the given training data.</p>
+<h6 id="torchml.neighbors.NearestCentroid.fit--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestCentroid.fit--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): array-like, sparse matrix of shape (n_samples, n_features)
+    Training vector, where <code>n_samples</code> is the number of samples and
+    <code>n_features</code> is the number of features</li>
+<li><code>y</code> (torch.Tensor): array-like of shape (n_samples,) Target values</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.NearestCentroid.predict" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">method</span> <span class="n">tensor</span> <span class="n">of</span> <span class="nb">type</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x112c183b0</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">method</span> <span class="n">tensor</span> <span class="n">of</span> <span class="nb">type</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x112c183b0</span><span class="o">&gt;</span></code>
+
+
+<a href="#torchml.neighbors.NearestCentroid.predict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.NearestCentroid.predict--description">Description<a class="headerlink" href="#torchml.neighbors.NearestCentroid.predict--description" title="Permanent link">&para;</a></h6>
+<p>Computes the classes of the sample data</p>
+<h6 id="torchml.neighbors.NearestCentroid.predict--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.NearestCentroid.predict--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the sample data, each with n-features</li>
+</ul>
+<h6 id="torchml.neighbors.NearestCentroid.predict--return">Return<a class="headerlink" href="#torchml.neighbors.NearestCentroid.predict--return" title="Permanent link">&para;</a></h6>
+<ul>
+<li>(torch.Tensor): the predicted classes</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h3 id="torchml.neighbors.KNeighborsClassifier" class="doc doc-heading">
+        <code>
+torchml.neighbors.KNeighborsClassifier        </code>
+
+
+
+<a href="#torchml.neighbors.KNeighborsClassifier" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents first">
+
+      <h5 id="torchml.neighbors.KNeighborsClassifier--description">Description<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier--description" title="Permanent link">&para;</a></h5>
+<p>Unsupervised learner for implementing KNN Classifier.</p>
+<h5 id="torchml.neighbors.KNeighborsClassifier--references">References<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier--references" title="Permanent link">&para;</a></h5>
+<ol>
+<li>Fix, E. and Hodges, J.L. (1951) Discriminatory Analysis, Nonparametric Discrimination: Consistency Properties. Technical Report 4, USAF School of Aviation Medicine, Randolph Field.</li>
+<li>MIT 6.034 Artificial Intelligence, Fall 2010, <a href="https://www.youtube.com/watch?v=09mb78oiPkA">10. Introduction to Learning, Nearest Neighbors</a></li>
+<li>The scikit-learn <a href="https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier">documentation page</a> for KNeighborsClassifier.</li>
+</ol>
+<h5 id="torchml.neighbors.KNeighborsClassifier--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier--arguments" title="Permanent link">&para;</a></h5>
+<ul>
+<li>
+<p><code>n_neighbors</code> (int, default=5):
+    Number of neighbors to use by default for kneighbors queries.</p>
+</li>
+<li>
+<p><code>weights</code> (str {'uniform', 'distance'} or callable, default='uniform'):</p>
+<ul>
+<li>'uniform' : uniform weights. All points in each neighborhood are weighted equally.</li>
+<li>'distance' : weight points by the inverse of their distance. in this case, closer neighbors of a query point will have a greater influence than neighbors which are further away.</li>
+<li>[callable] : not implemented yet</li>
+</ul>
+</li>
+<li>
+<p><code>algorithm</code> (str, default='auto'):
+    Dummy variable to keep consistency with SKlearn's API, always 'brute' for now.</p>
+</li>
+<li>
+<p><code>leaf_size</code> (int, default=30)
+    Dummy variable to keep consistency with SKlearn's API.</p>
+</li>
+<li>
+<p><code>metric</code> (str or callable, default=’minkowski’):
+    No metric supprt right now, dummy variable and always minkowski</p>
+</li>
+<li>
+<p><code>p</code> (int, default=2):
+    No metric supprt right now, dummy variable and always 2</p>
+</li>
+<li>
+<p><code>metric_paramsdict</code> (default=None):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+<li>
+<p><code>n_jobs</code> (int, default=None):
+    Dummy variable to mimic the sklearn API</p>
+</li>
+</ul>
+<h5 id="torchml.neighbors.KNeighborsClassifier--example">Example<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier--example" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torchml</span> <span class="k">as</span> <span class="nn">ml</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">]])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">])</span>
+<span class="n">neigh</span> <span class="o">=</span> <span class="n">ml</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+<span class="n">neigh</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+<span class="n">neigh</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+</code></pre></div>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.KNeighborsClassifier.fit" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span></code>
+
+
+<a href="#torchml.neighbors.KNeighborsClassifier.fit" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.KNeighborsClassifier.fit--description">Description<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.fit--description" title="Permanent link">&para;</a></h6>
+<p>Initialize the class with training sets</p>
+<h6 id="torchml.neighbors.KNeighborsClassifier.fit--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.fit--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the training set</li>
+<li><code>y</code> (torch.Tensor, default=None): dummy variable used to maintain the scikit-learn API consistency</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.KNeighborsClassifier.kneighbors" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">kneighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_distance</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span></code>
+
+
+<a href="#torchml.neighbors.KNeighborsClassifier.kneighbors" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.KNeighborsClassifier.kneighbors--description">Description<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.kneighbors--description" title="Permanent link">&para;</a></h6>
+<p>Computes the knearest neighbors and returns those k neighbors</p>
+<h6 id="torchml.neighbors.KNeighborsClassifier.kneighbors--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.kneighbors--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the target point</li>
+<li><code>n_neighbors</code> (int, default=None): optional argument to respecify the parameter k in k nearest neighbors</li>
+<li><code>return_distance</code> (bool, default=True): returns the distances to the neighbors if true</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.KNeighborsClassifier.predict" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span></code>
+
+
+<a href="#torchml.neighbors.KNeighborsClassifier.predict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.KNeighborsClassifier.predict--description">Description<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.predict--description" title="Permanent link">&para;</a></h6>
+<p>Predict the class labels for the provided data.</p>
+<h6 id="torchml.neighbors.KNeighborsClassifier.predict--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.predict--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the target point</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h4 id="torchml.neighbors.KNeighborsClassifier.predict_proba" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span></code>
+
+
+<a href="#torchml.neighbors.KNeighborsClassifier.predict_proba" class="headerlink" title="Permanent link">&para;</a></h4>
+
+    <div class="doc doc-contents ">
+
+      <h6 id="torchml.neighbors.KNeighborsClassifier.predict_proba--description">Description<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.predict_proba--description" title="Permanent link">&para;</a></h6>
+<p>Return probability estimates for the test data X.</p>
+<h6 id="torchml.neighbors.KNeighborsClassifier.predict_proba--arguments">Arguments<a class="headerlink" href="#torchml.neighbors.KNeighborsClassifier.predict_proba--arguments" title="Permanent link">&para;</a></h6>
+<ul>
+<li><code>X</code> (torch.Tensor): the target point</li>
+</ul>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../naive_bayes/" title="torchml.naive_bayes" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                torchml.naive_bayes
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../discriminant_analysis/" title="torchml.discriminant_analysis" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                torchml.discriminant_analysis
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/learnables" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://github.com/learnables/torchml/issues/new" target="_blank" rel="noopener" title="bug" class="md-footer-social__link fa fa-bug"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.2.4",url:{base:"../.."}})</script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/mathtex-script-type.min.js"></script>
+      
+    
+  </body>
+</html>
