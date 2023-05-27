@@ -171,7 +171,7 @@ class KNeighborsClassifier(ml.Model):
                 mode, _ = torch.mode(_y[neigh_ind, k], dim=1)
             else:
                 mode, _ = self._weighted_mode(_y[neigh_ind, k], weights)
-            mode = torch.asarray(mode.ravel(), dtype=torch.long)
+            mode = torch.tensor(mode.ravel(), dtype=torch.long)
             y_pred[:, k] = classes_k.take(mode)
 
         if not self.outputs_2d_:

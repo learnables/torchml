@@ -2,24 +2,31 @@
 nav:
   - Home: index.md
   - Documentation:
-    - torchml: api/index.md
     - torchml.linear_model: api/linear_model.md
     - torchml.naive_bayes: api/naive_bayes.md
     - torchml.neighbors: api/neighbors.md
+    - torchml.discriminant_analysis: api/discriminant_analysis.md
+    - torchml.kernel_approximations: api/kernel_approximations.md
+  - Tutorials:
+    - Linear Models: tutorials/linear_model.md
+    - Naive Bayes: tutorials/gaussian_nb.md
+    - Nearest Neighbors: tutorials/neighbors.md
+    - Nearest Centroid: tutorials/nearest_centroid.md
   - Changelog: changelog.md
-  - GitHub: https://github.com/learnables/mypackage/
+  - Getting Started: getting_started.md
+  - GitHub: https://github.com/learnables/torchml/
 
 docs_dir: ./docs
-site_name: mypackage
-site_url: http://mypackage.net
+site_name: torchml
+site_url: http://torchml.net
 site_author: 'Séb Arnold'
 google_analytics: ['UA-68693545-3', 'learnables.github.com']
-repo_name: 'learnables/mypackage'
-repo_url: 'https://github.com/learnables/mypackage'
+repo_name: 'learnables/torchml'
+repo_url: 'https://github.com/learnables/torchml'
 edit_uri: ''
 theme:
   name: 'material'
-  logo: 'assets/images/mypackage.png'
+  logo: 'assets/images/torchml-icon.png'
   favicon: 'assets/images/favicon.ico'
   palette:
     primary: 'white'
@@ -43,7 +50,7 @@ extra:
     - type: 'github'
       link: 'https://github.com/learnables'
     - type: 'bug'
-      link: 'https://github.com/learnables/mypackage/issues/new'
+      link: 'https://github.com/learnables/torchml/issues/new'
 
 plugins:
   - search
