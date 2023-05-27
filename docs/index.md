@@ -1,4 +1,4 @@
-<p align="center"><img src="/assets/images/torchml-logo.png" height="120px" /></p>
+<p align="center"><img src="https://learnables.net/torchml/assets/images/torchml-logo.png" height="120px" /></p>
 
 --------------------------------------------------------------------------------
 
