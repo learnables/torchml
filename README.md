@@ -26,7 +26,7 @@ import torchml as ml
 (X_train, y_train), (X_test, y_test) = generate_data()
 
 # API closely follows scikit-learn
-linreg = ml.linear_mode.LinearRegression()
+linreg = ml.linear_model.LinearRegression()
 linreg.fit(X_train, y_train)
 linreg.predict(X_test)
 ~~~

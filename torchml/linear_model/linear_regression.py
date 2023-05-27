@@ -10,24 +10,29 @@ class LinearRegression(ml.Model):
 
     ## Description
 
-    One-liner description (eg, "Ordinary least-square model with bias term").
+    Ordinary least-square model with bias term.
 
-    You can write a more thorough description here, including references and even equations.
-    Solves:
+    Solves the following optimization problem in closed form:
 
     $$ \\min_w \\vert \\vert  Xw - y \\vert \\vert^2 $$
 
     ## References
 
-    1. Gauss, for OLS?
+    1. [Wikipedia](https://en.wikipedia.org/wiki/Ordinary_least_squares).
+    1. Scikit-learn documentation. [link](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html).
 
     ## Arguments
 
-    * `arg1` (int) - The first argument.
+    * `fit_intercept` (bool) - Whether to fit a bias term.
+    * `normalized` (str) - Normalizes scheme to use.
+    * `copy_X` (bool) - Whether to copy the data X (else, it might be modified in-place).
+    * `n_jobs` (int) - Dummy to match the scikit-learn API.
+    * `positive` (bool) - Forces the coefficients to be positive when True (not implemented).
 
     ## Example
 
     ~~~python
+    linreg = LinearRegression(fit_intercept=False)
     ~~~
     """
 
