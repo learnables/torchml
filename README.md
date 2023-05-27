@@ -5,7 +5,7 @@
 ![Test Status](https://github.com/learnables/torchml/workflows/Testing/badge.svg?branch=master)
 
 `torchml` implements the scikit-learn API on top of PyTorch.
-This we automatically get GPU support for scikit-learn and, when possible, differentiability.
+This means we automatically get GPU support for scikit-learn and, when possible, differentiability.
 
 ## Resources
 
