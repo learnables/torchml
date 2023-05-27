@@ -116,8 +116,7 @@ class NearestCentroid(ml.Model):
 
         for i in range(X.size(dim=0)):
             ret[i] = self.classes_[
-                torch.argmin(torch.nn.PairwiseDistance(p=2)
-                             (X[i], self.centroids_))
+                torch.argmin(torch.nn.PairwiseDistance(p=2)(X[i], self.centroids_))
             ]
 
         # return ret.to(self.y_type)
