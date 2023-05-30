@@ -143,8 +143,7 @@ class LinearDiscriminantAnalysis(ml.Model):
         # 3) Between variance scaling
         # Scale weighted centers
         X = (
-            (torch.sqrt((n_samples * self.priors_) * fac))
-            * (self.means_ - self.xbar_).T
+            (torch.sqrt((n_samples * self.priors_) * fac)) * (self.means_ - self.xbar_).T
         ).T @ scalings.float()
         # Centers are living in a space with n_classes-1 dim (maximum)
         # Use SVD to find projection in the space spanned by the

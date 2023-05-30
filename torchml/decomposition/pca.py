@@ -79,11 +79,9 @@ class PCA(ml.Model):
 
         # Select the solver
         if self.svd_solver == "auto":
-            if (
-                X.shape[0] > 500
-                and X.shape[1] > 500
-                and self.n_components < 0.8 * min(X.shape)
-            ):
+            if X.shape[0] > 500 and \
+               X.shape[1] > 500 and \
+               self.n_components < 0.8 * min(X.shape):
                 self.svd_solver = "randomized"
             else:
                 self.svd_solver = "full"
